@@ -10,8 +10,8 @@ globalStyle('*, *::before, *::after', {
 });
 
 globalStyle('body', {
-  fontFamily: "'Shippori Antique', sans-serif",
   color: 'rgb(55, 65, 81)',
+  fontFamily: "'Karla', sans-serif",
 });
 
 globalStyle('#root', {

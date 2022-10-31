@@ -12,34 +12,87 @@ export const sidebar = style({
   padding: '1rem',
 });
 
+export const floatingBrand = style({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+
+  width: '12rem',
+  padding: '1rem 2rem',
+});
+
+export const logoSaved = style({
+  color: '#bcd2ee',
+  fontWeight: 800,
+  transition: 'color 0.5s ease',
+  selectors: {
+    '&:hover': { color: '#014f86' },
+  },
+});
+
+export const floatingProfile = style({
+  position: 'fixed',
+  top: 0,
+  right: 0,
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+
+  width: '12rem',
+  padding: '1rem',
+  textAlign: 'right',
+});
+
 export const avatar = style({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  verticalAlign: 'middle',
   overflow: 'hidden',
   userSelect: 'none',
+
   width: 45,
   height: 45,
   borderRadius: '100%',
-  backgroundColor: '#e0f2fe',
+  backgroundColor: '#bcd2ee',
+  verticalAlign: 'middle',
+
+  transition: 'background-color 0.5s ease',
+
+  selectors: {
+    '&:hover': {
+      backgroundColor: '#014f86',
+    },
+  },
+});
+
+export const fallback = style({
+  selectors: {
+    [`${avatar} &`]: {
+      color: '#f0f9ff',
+      fontWeight: 'bold',
+    },
+  },
 });
 
 export const sideMenus = style({
   listStyle: 'none',
   padding: 0,
-  fontSize: '0.8em',
+  marginRight: '0.5rem',
 });
 
 export const menuLink = style({
-  color: '#0369a1',
+  display: 'block',
+  color: '#bcd2ee',
   textDecoration: 'none',
+
   selectors: {
+    [`${sideMenus}:hover a.&`]: {},
     [`${sideMenus} a.&`]: {
-      opacity: 0.25,
+      transition: 'color 0.15s ease',
     },
     [`${sideMenus} a.&:hover`]: {
-      opacity: 1,
+      color: '#ff595e',
     },
   },
 });
@@ -49,21 +102,56 @@ export const noteList = style({
   padding: '2rem 1rem',
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
+  gap: '2.25rem',
 });
 
-export const startBlock = style({
+export const separatorBlock = style({
   paddingBlock: '1rem',
-  color: '#0369a1',
+  color: '#bcd2ee',
+  fontWeight: 700,
   textAlign: 'center',
-  opacity: 0.25,
+});
+
+export const separatorDate = style({
+  paddingBlock: '1rem',
+  color: '#bcd2ee',
+  fontWeight: 700,
+  textAlign: 'center',
 });
 
 export const card = style({
-  minHeight: '20rem',
-  padding: '2.25rem 2rem',
-  borderRadius: '0.5rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+
+  borderRadius: '0.3rem',
   border: '1px solid #e0f2fe',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
   backgroundColor: '#ffffff',
-  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.15)',
+});
+
+export const note = style({
+  selectors: {
+    [`${card} &`]: {
+      paddingTop: '2.25rem',
+      paddingInline: '2rem',
+      lineHeight: 1.6,
+    },
+  },
+});
+
+export const status = style({
+  selectors: {
+    [`${card} &`]: {
+      display: 'flex',
+      gap: '0.75rem',
+      justifyContent: 'flex-end',
+
+      padding: '0.5rem 0.875rem',
+      color: '#bcd2ee',
+      fontSize: '0.75em',
+      fontFamily: 'mono',
+      textAlign: 'right',
+    },
+  },
 });
