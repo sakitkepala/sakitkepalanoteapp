@@ -11,7 +11,7 @@ export function App() {
       <header></header>
 
       <div>
-        <div className={component.container}>
+        <div className={component.gridContainer}>
           <SideBarLeft />
 
           <div>
@@ -21,10 +21,8 @@ export function App() {
           <SideBarRight />
         </div>
 
-        <div className={component.bottom}>
-          <div />
+        <div className={component.stickyBottom}>
           <ComposerBar />
-          <div />
         </div>
       </div>
     </>

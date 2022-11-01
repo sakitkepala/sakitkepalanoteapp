@@ -1,9 +1,10 @@
 import { style } from '@vanilla-extract/css';
-import { card } from '../notes/index.css';
+import { gridContainer } from '../../components.css';
+import { card as cardGlobal } from '../notes/index.css';
 
 export const panel = style({
-  position: 'relative',
-  zIndex: 0,
+  display: 'grid',
+  gridTemplateRows: 'min-content 1fr',
 });
 
 export const fader = style({
@@ -17,74 +18,94 @@ export const fader = style({
   },
 });
 
-export const composerTrigger = style({
+export const commanderContainer = style({
   borderTop: '1px solid #e0f2fe',
+  backgroundColor: '#f0f9ff',
+
+  selectors: {
+    [`*[data-composer-active="true"] &`]: {
+      height: 200,
+    },
+  },
+});
+
+export const commander = style({
   display: 'flex',
   justifyContent: 'space-between',
   color: '#bcd2ee',
   fontWeight: 700,
   cursor: 'text',
-  transition: 'color 0.15s ease',
+  transition: 'opacity 0.15s ease',
 
   selectors: {
     [`${panel} &`]: {
       padding: '2rem',
       backgroundColor: '#f0f9ff',
     },
+
     [`${panel}:hover &`]: {
-      color: 'rgba(240, 249, 255, 0)',
+      opacity: 0,
+    },
+
+    [`*[data-composer-active="true"] &`]: {
+      opacity: 0,
     },
   },
 });
 
-export const composerOverlay = style({
-  overflow: 'hidden',
-  pointerEvents: 'none',
-
+export const composerContainer = style({
   position: 'absolute',
   zIndex: 0,
   insetInline: 0,
   bottom: 0,
   height: '100vh',
+  pointerEvents: 'none',
+  overflow: 'hidden',
 
   selectors: {
-    [`&[data-composer-active="true"]`]: {
-      pointerEvents: 'all',
+    [`${gridContainer} &`]: {
+      gridTemplateRows: '1fr min-content',
     },
   },
 });
 
-export const composerTriggerCard = style({
+export const composer = style({
+  gridRow: 2,
+});
+
+export const card = style({
+  pointerEvents: 'all',
+  cursor: 'text',
+
+  transform: 'translateY(95%) rotate(1deg)',
+  transformOrigin: 'top right',
+  transition:
+    'transform 0.35s ease, ' +
+    'boxShadow 0.35s ease, ' +
+    'border-color 0.15s ease',
+
+  height: 'calc(200px - 2rem)',
+  color: 'rgb(55, 65, 81, 0.25)',
+  fontWeight: 700,
+
   selectors: {
-    [`${panel} ${card}&`]: {
-      pointerEvents: 'all',
-      cursor: 'text',
-      height: '8rem',
+    [`${cardGlobal}&`]: {
       borderBottomLeftRadius: '0',
       borderBottomRightRadius: '0',
       borderBottom: 'none',
-      color: 'rgb(55, 65, 81, 0.25)',
-      fontWeight: 700,
-
-      position: 'absolute',
-      insetInline: '1rem',
-      bottom: 0,
-      transform: 'translateY(95%) rotate(1deg)',
-      transformOrigin: 'top right',
-      transition:
-        'transform 0.35s ease, boxShadow 0.35s ease, ' +
-        'border-color 0.15s ease',
     },
 
-    [`${panel}:hover &`]: {
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.05)',
-      transform: 'translateY(40%) rotate(1deg)',
-    },
+    [`${panel}:hover + ${composerContainer}:not([data-composer-active="true"]) &, &:hover`]:
+      {
+        transitionDelay: '0.1s',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.05)',
+        transform: 'translateY(60%) rotate(1deg)',
+      },
 
-    [`${panel} ${composerOverlay}[data-composer-active="true"] &`]: {
+    [`*[data-composer-active="true"] &`]: {
       borderColor: '#e0f2fe',
       outline: '1px solid #e0f2fe',
-      transform: 'translateY(10%) rotate(0)',
+      transform: 'translateY(0) rotate(0)',
     },
   },
 });

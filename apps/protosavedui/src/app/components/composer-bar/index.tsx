@@ -1,60 +1,64 @@
 import * as React from 'react';
-import { TypingCursor } from '../typing-cursor';
-import * as component from './index.css';
 
+import { motion } from 'framer-motion';
+import { TypingCursor } from '../typing-cursor';
+
+import { gridContainer, gridMiddle } from '../../components.css';
 import { card, text } from '../notes/index.css';
+import * as bar from './index.css';
 
 import clsx from 'clsx';
 
-const ComposerBar = React.forwardRef(
-  (props, ref: React.Ref<HTMLDivElement>) => {
-    return (
-      <div ref={ref} className={component.panel}>
-        <div className={component.fader}></div>
-        <ComposerBarPlaceholder />
-        <Composer />
-      </div>
-    );
-  }
-);
-
-const ComposerBarPlaceholder = React.forwardRef(
-  (props, ref: React.Ref<HTMLDivElement>) => {
-    return (
-      <div ref={ref} className={component.composerTrigger}>
-        <span>
-          &gt; <TypingCursor />
-          Tulis catatan...
-        </span>
-        <span>
-          perintah <kbd className={component.kbd}>&#47;</kbd>
-        </span>
-      </div>
-    );
-  }
-);
-
-function Composer() {
+function ComposerBar() {
   const [isComposerActive, setComposerActive] = React.useState(false);
+
   return (
-    <div
-      className={component.composerOverlay}
-      data-composer-active={isComposerActive}
-      onClick={isComposerActive ? () => setComposerActive(false) : undefined}
-    >
-      <div
-        className={clsx(card, component.composerTriggerCard)}
-        onClick={() => setComposerActive(true)}
-      >
-        <div className={text}>
-          <span className={component.placeholder}>
-            <TypingCursor />
-            Tulis catatan...
-          </span>
+    <>
+      <div className={gridContainer} data-composer-active={isComposerActive}>
+        <motion.div
+          className={clsx(gridMiddle, bar.panel)}
+          layout
+          transition={{
+            layout: { duration: 0.15 },
+          }}
+        >
+          <div className={bar.fader} />
+          <div className={bar.commanderContainer}>
+            {!isComposerActive && (
+              <div className={bar.commander}>
+                <span>
+                  &gt; <TypingCursor />
+                  Tulis catatan...
+                </span>
+                <span>
+                  perintah <kbd className={bar.kbd}>&#47;</kbd>
+                </span>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        <div
+          className={clsx(gridContainer, bar.composerContainer)}
+          data-composer-active={isComposerActive}
+        >
+          <div className={clsx(gridMiddle, bar.composer)}>
+            <div
+              className={clsx(card, bar.card)}
+              onClick={() => setComposerActive((active) => !active)}
+            >
+              <div className={text}>
+                <span className={bar.placeholder}>
+                  <TypingCursor />
+                  Tulis catatan...
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
-export { ComposerBar, ComposerBarPlaceholder };
+export { ComposerBar };
