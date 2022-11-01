@@ -10,6 +10,8 @@ globalStyle('*, *::before, *::after', {
 });
 
 globalStyle('body', {
+  overflowX: 'hidden',
+  backgroundColor: '#f0f9ff',
   color: 'rgb(55, 65, 81)',
   fontFamily: "'Karla', sans-serif",
 });
