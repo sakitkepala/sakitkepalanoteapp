@@ -20,7 +20,7 @@ export const card = style({
   flexDirection: 'column',
   gap: '1rem',
 
-  borderRadius: '0.6rem',
+  borderRadius: '0.4rem',
   border: '1px solid #e0f2fe',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
   backgroundColor: '#ffffff',

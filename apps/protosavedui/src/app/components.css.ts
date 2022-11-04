@@ -18,3 +18,13 @@ export const stickyBottom = style({
   position: 'sticky',
   bottom: 0,
 });
+
+export const kbd = style({
+  display: 'inline-block',
+  padding: '3px 6px',
+  borderRadius: 4,
+  border: '1px solid #e0f2fe',
+  boxShadow: '1px 1px 1px rgba(0, 0, 0, 0.05)',
+  backgroundColor: '#ffffff',
+  fontWeight: 700,
+});

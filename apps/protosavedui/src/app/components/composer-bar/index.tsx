@@ -3,61 +3,134 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import { TypingCursor } from '../typing-cursor';
 
-import { gridContainer, gridMiddle } from '../../components.css';
+import { gridContainer, gridMiddle, kbd } from '../../components.css';
 import { card, text } from '../notes/index.css';
 import * as bar from './index.css';
 
 import clsx from 'clsx';
 
 function ComposerBar() {
-  const [isComposerActive, setComposerActive] = React.useState(false);
+  const [isComposerOpen, setComposerOpen] = React.useState(false);
+
+  const openComposer = () => setComposerOpen(true);
+  const closeComposer = () => setComposerOpen(false);
+
+  const handleClickDiscard = async (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    closeComposer();
+  };
+
+  const [isLoading, setLoading] = React.useState(false);
+
+  const handleClickSubmit = async (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+
+    // fake submit, temporarily
+    setLoading(true);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 500);
+    });
+    setLoading(false);
+
+    closeComposer();
+  };
 
   return (
     <>
-      <div className={gridContainer} data-composer-active={isComposerActive}>
+      <div
+        className={clsx(bar.container, gridContainer)}
+        data-composer-open={isComposerOpen}
+      >
         <motion.div
           className={clsx(gridMiddle, bar.panel)}
           layout
           transition={{
-            layout: { duration: 0.15 },
+            layout: {
+              type: 'spring',
+              duration: 0.35,
+            },
           }}
         >
-          <div className={bar.fader} />
-          <div className={bar.commanderContainer}>
-            {!isComposerActive && (
-              <div className={bar.commander}>
-                <span>
-                  &gt; <TypingCursor />
-                  Tulis catatan...
-                </span>
-                <span>
-                  perintah <kbd className={bar.kbd}>&#47;</kbd>
-                </span>
-              </div>
-            )}
+          <div className={bar.panelFader} />
+          <div className={bar.panelBase}>
+            <motion.div
+              initial="idle"
+              whileHover={!isComposerOpen ? 'peek' : undefined}
+              className={bar.composerContainer}
+              onClick={openComposer}
+            >
+              {!isComposerOpen && (
+                <div className={bar.commander}>
+                  <CommanderPlaceholder />
+                </div>
+              )}
+
+              <motion.div
+                className={bar.composer}
+                variants={{
+                  idle: { y: '80%', rotateZ: '0.5deg' },
+                  peek: { y: '50%' },
+                  reveal: {
+                    y: 0,
+                    rotateZ: 0,
+                    transition: {
+                      delay: 0.075,
+                    },
+                  },
+                }}
+                animate={isComposerOpen ? 'reveal' : undefined}
+              >
+                <div style={{ justifySelf: 'end' }}>
+                  {isComposerOpen && <button>attch</button>}
+                </div>
+
+                <div className={clsx(card, bar.card)}>
+                  <div className={text}>
+                    <ComposerPlaceholder isLoading={isLoading} />
+                  </div>
+                </div>
+
+                <div>
+                  {isComposerOpen && (
+                    <>
+                      <button onClick={handleClickDiscard}>buang</button>
+                      <button onClick={handleClickSubmit}>
+                        {isLoading ? 'submiting...' : 'save'}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </motion.div>
-
-        <div
-          className={clsx(gridContainer, bar.composerContainer)}
-          data-composer-active={isComposerActive}
-        >
-          <div className={clsx(gridMiddle, bar.composer)}>
-            <div
-              className={clsx(card, bar.card)}
-              onClick={() => setComposerActive((active) => !active)}
-            >
-              <div className={text}>
-                <span className={bar.placeholder}>
-                  <TypingCursor />
-                  Tulis catatan...
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </>
+  );
+}
+
+function CommanderPlaceholder() {
+  return (
+    <>
+      <span>
+        &gt; <TypingCursor />
+        Tulis catatan...
+      </span>
+      <span>
+        perintah <kbd className={kbd}>&#47;</kbd>
+      </span>
+    </>
+  );
+}
+
+function ComposerPlaceholder({ isLoading }: { isLoading?: boolean }) {
+  return (
+    <span style={{ opacity: 0.25, fontWeight: 700 }}>
+      &gt; <TypingCursor />
+      {isLoading ? 'Menyimpan...' : 'Tulis catatan...'}
+    </span>
   );
 }
 
