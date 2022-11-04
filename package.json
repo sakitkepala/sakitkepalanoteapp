@@ -9,9 +9,12 @@
   },
   "private": true,
   "dependencies": {
+    "@codemirror/lang-markdown": "^6.0.4",
+    "@codemirror/language-data": "^6.1.0",
     "@radix-ui/react-avatar": "^1.0.1",
     "@vanilla-extract/css": "^1.9.1",
     "clsx": "^1.2.1",
+    "codemirror": "^6.0.1",
     "core-js": "^3.6.5",
     "framer-motion": "^7.6.3",
     "react": "18.2.0",

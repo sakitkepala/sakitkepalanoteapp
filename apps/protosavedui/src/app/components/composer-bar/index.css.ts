@@ -73,7 +73,7 @@ export const composer = style({
   gridTemplateColumns: '1fr 460px 1fr',
   alignItems: 'end',
 
-  transform: 'translateY(100%) rotateZ(1deg)',
+  transform: 'translateY(80%) rotateZ(0.5deg)',
 });
 
 export const card = style({

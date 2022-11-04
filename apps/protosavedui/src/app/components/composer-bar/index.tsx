@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { motion } from 'framer-motion';
 import { TypingCursor } from '../typing-cursor';
+import { NoteEditor } from '../editor';
 
 import { gridContainer, gridMiddle, kbd } from '../../components.css';
 import { card, text } from '../notes/index.css';
@@ -11,9 +12,14 @@ import clsx from 'clsx';
 
 function ComposerBar() {
   const [isComposerOpen, setComposerOpen] = React.useState(false);
+  const [shouldInitEditor, setShouldInitEditor] = React.useState(false);
+  const [markdown, setMarkdown] = React.useState('');
 
   const openComposer = () => setComposerOpen(true);
-  const closeComposer = () => setComposerOpen(false);
+  const closeComposer = () => {
+    setComposerOpen(false);
+    setShouldInitEditor(false);
+  };
 
   const handleClickDiscard = async (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
@@ -81,6 +87,9 @@ function ComposerBar() {
                   },
                 }}
                 animate={isComposerOpen ? 'reveal' : undefined}
+                onAnimationComplete={
+                  isComposerOpen ? () => setShouldInitEditor(true) : undefined
+                }
               >
                 <div style={{ justifySelf: 'end' }}>
                   {isComposerOpen && <button>attch</button>}
@@ -88,7 +97,24 @@ function ComposerBar() {
 
                 <div className={clsx(card, bar.card)}>
                   <div className={text}>
-                    <ComposerPlaceholder isLoading={isLoading} />
+                    {isComposerOpen && shouldInitEditor ? (
+                      <>
+                        <NoteEditor onChange={setMarkdown} />
+                        <div>
+                          <span>Baca:</span>
+                          {markdown ? (
+                            <pre>{markdown}</pre>
+                          ) : (
+                            <span>Ketik dulu...</span>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <ComposerPlaceholder
+                        isWaiting={isComposerOpen && !shouldInitEditor}
+                        isLoading={isLoading}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -125,11 +151,21 @@ function CommanderPlaceholder() {
   );
 }
 
-function ComposerPlaceholder({ isLoading }: { isLoading?: boolean }) {
+function ComposerPlaceholder({
+  isLoading,
+  isWaiting,
+}: {
+  isLoading?: boolean;
+  isWaiting?: boolean;
+}) {
   return (
     <span style={{ opacity: 0.25, fontWeight: 700 }}>
       &gt; <TypingCursor />
-      {isLoading ? 'Menyimpan...' : 'Tulis catatan...'}
+      {isLoading
+        ? 'Menyimpan...'
+        : isWaiting
+        ? 'Tunggu sebentar...'
+        : 'Tulis catatan...'}
     </span>
   );
 }
