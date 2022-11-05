@@ -7,6 +7,8 @@ import * as global from '../../app.css';
 import * as note from './index.css';
 
 import clsx from 'clsx';
+import { parseISO, format, isYesterday, isToday } from 'date-fns';
+import id from 'date-fns/locale/id';
 
 import type { NoteItem } from './hooks/notes';
 
@@ -14,24 +16,6 @@ type NoteGroup = {
   day: string;
   noteItems: NoteItem[];
 };
-
-function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
-  // TODO: Logic ngelompokin note menurut tanggal
-
-  return React.useMemo<NoteGroup[]>(
-    () => [
-      {
-        day: 'Kemarin',
-        noteItems: notes?.slice(3) || [],
-      },
-      {
-        day: 'Hari Ini',
-        noteItems: notes?.slice(0, 3) || [],
-      },
-    ],
-    [notes]
-  );
-}
 
 function NoteList() {
   const { data: notes } = useNotes();
@@ -50,12 +34,14 @@ function NoteList() {
               <div className={note.status}>
                 {item.id === 5 && (
                   <>
+                    {/* Fake edit */}
+                    {/* TODO: ganti status asli dari data API */}
                     <span>
                       <u>diedit</u>
                     </span>{' '}
                   </>
                 )}
-                <span>{item.time}</span>
+                <span>{item.createdAt}</span>
               </div>
             </div>
           ))}
@@ -77,6 +63,59 @@ function NoteText({ children }: NoteTextProps) {
       <RenderMarkdown>{children}</RenderMarkdown>
     </div>
   );
+}
+
+/* =============================== */
+// hooks
+
+function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
+  return React.useMemo<NoteGroup[]>(() => {
+    if (!notes?.length) {
+      return [];
+    }
+
+    const groups: NoteGroup[] = [];
+    const tmpGroup: {
+      [date: number]: {
+        datetime: Date;
+        notes: NoteItem[];
+      };
+    } = {};
+
+    for (const noteItem of notes) {
+      const datetime = parseISO(noteItem.createdAt);
+      const date = datetime.getDate();
+
+      tmpGroup[date] = tmpGroup[date] || { datetime, notes: [] };
+      tmpGroup[date].notes.push({
+        ...noteItem,
+        createdAt: format(datetime, 'H:m', { locale: id }),
+      });
+    }
+
+    for (const dateNumber in tmpGroup) {
+      const { datetime, notes } = tmpGroup[dateNumber];
+      groups.push({
+        day: _formatDayLabel(datetime),
+        noteItems: notes,
+      });
+    }
+
+    return groups;
+  }, [notes]);
+}
+
+/* =============================== */
+// utils
+
+function _formatDayLabel(datetime: Date): string {
+  if (isToday(datetime)) {
+    return 'Hari Ini';
+  }
+  if (isYesterday(datetime)) {
+    return 'Kemarin';
+  }
+  return format(datetime, 'd MMM', { locale: id });
 }
 
 export { NoteList };

@@ -4,9 +4,8 @@ import { makeMockNotes } from './notes.mock';
 
 export type NoteItem = {
   id: number;
-  time: string;
   note: string;
-  type: string;
+  createdAt: string;
 };
 
 export type NoteListData = NoteItem[] | null;
