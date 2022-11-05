@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import RenderMarkdown from 'react-markdown';
-import { useNotes } from './hooks/notes';
 
 import * as global from '../../app.css';
 import * as note from './index.css';
@@ -17,8 +16,11 @@ type NoteGroup = {
   noteItems: NoteItem[];
 };
 
-function NoteList() {
-  const { data: notes } = useNotes();
+type NoteListProps = {
+  notes: NoteItem[];
+};
+
+function NoteList({ notes }: NoteListProps) {
   const listByDate = useListByDate(notes);
 
   return (

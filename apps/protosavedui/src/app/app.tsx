@@ -1,3 +1,5 @@
+import { useNotes } from './components/notes/hooks/notes';
+
 import { SideBarLeft, SideBarRight } from './components/sidebar';
 import { NoteList } from './components/notes';
 import { ComposerDock } from './components/composer-dock';
@@ -6,6 +8,7 @@ import './app.css';
 import * as component from './components.css';
 
 export function App() {
+  const notes = useNotes();
   return (
     <>
       <header></header>
@@ -15,14 +18,14 @@ export function App() {
           <SideBarLeft />
 
           <div>
-            <NoteList />
+            <NoteList notes={notes.data} />
           </div>
 
           <SideBarRight />
         </div>
 
         <div className={component.stickyBottom}>
-          <ComposerDock />
+          <ComposerDock onSave={notes.create} />
         </div>
       </div>
     </>

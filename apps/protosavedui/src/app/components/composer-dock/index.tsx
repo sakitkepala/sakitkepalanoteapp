@@ -10,7 +10,9 @@ import * as dock from './index.css';
 
 import clsx from 'clsx';
 
-function ComposerDock() {
+type ComposerDock = { onSave: (markdown: string) => void };
+
+function ComposerDock({ onSave }: ComposerDock) {
   const [isComposerOpen, setComposerOpen] = React.useState(false);
   const [shouldInitEditor, setShouldInitEditor] = React.useState(false);
   const [markdown, setMarkdown] = React.useState('');
@@ -35,6 +37,7 @@ function ComposerDock() {
     setLoading(true);
     await new Promise((resolve) => {
       setTimeout(() => {
+        onSave(markdown);
         resolve(true);
       }, 500);
     });

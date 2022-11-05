@@ -7,7 +7,7 @@ function makeMockNotes(): NoteItem[] {
   const kemarin = subDays(today, 1);
   const kemarinLusa = subDays(today, 2);
 
-  return [...new Array(6)].map((empty: unknown, index: number) => {
+  return [...new Array(7)].map((empty: unknown, index: number) => {
     const date: Date = addHours(kemarin, index);
     const item: NoteItem = {
       id: index + 1,
@@ -23,6 +23,14 @@ function makeMockNotes(): NoteItem[] {
       return {
         ...item,
         createdAt: _formatServerDatetime(date),
+      };
+    }
+
+    if (index === 6) {
+      return {
+        ...item,
+        createdAt: _formatServerDatetime(today),
+        note: `## TODO:\n\n\`\`\`- [ ] Pasang \`react-query\` buat get & submit data notes\`\`\``,
       };
     }
 
