@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type { NoteItem } from './hooks/notes';
+import RenderMarkdown from 'react-markdown';
 import { useNotes } from './hooks/notes';
 
 import * as global from '../../app.css';
@@ -8,12 +8,16 @@ import * as note from './index.css';
 
 import clsx from 'clsx';
 
+import type { NoteItem } from './hooks/notes';
+
 type NoteGroup = {
   day: string;
   noteItems: NoteItem[];
 };
 
 function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
+  // TODO: Logic ngelompokin note menurut tanggal
+
   return React.useMemo<NoteGroup[]>(
     () => [
       {
@@ -22,7 +26,7 @@ function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
       },
       {
         day: 'Hari Ini',
-        noteItems: notes?.slice(3) || [],
+        noteItems: notes?.slice(0, 3) || [],
       },
     ],
     [notes]
@@ -41,11 +45,7 @@ function NoteList() {
 
           {group.noteItems.map((item: NoteItem) => (
             <div key={item.id} className={note.card}>
-              <div className={clsx(note.text, global.flow)}>
-                {item.note.map((line, index) => (
-                  <p key={index}>{line.text}</p>
-                ))}
-              </div>
+              <NoteText>{item.note}</NoteText>
 
               <div className={note.status}>
                 {item.id === 5 && (
@@ -61,6 +61,20 @@ function NoteList() {
           ))}
         </React.Fragment>
       ))}
+    </div>
+  );
+}
+
+type NoteTextProps = { children?: string };
+
+function NoteText({ children }: NoteTextProps) {
+  if (!children) {
+    return null;
+  }
+
+  return (
+    <div className={clsx(note.text, global.flow)}>
+      <RenderMarkdown>{children}</RenderMarkdown>
     </div>
   );
 }

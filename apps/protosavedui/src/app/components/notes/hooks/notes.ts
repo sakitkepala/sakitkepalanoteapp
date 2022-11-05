@@ -5,7 +5,7 @@ import { makeMockNotes } from './notes.mock';
 export type NoteItem = {
   id: number;
   time: string;
-  note: { type: string; text: string }[];
+  note: string;
   type: string;
 };
 
