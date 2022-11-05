@@ -6,11 +6,11 @@ import { NoteEditor } from '../editor';
 
 import { gridContainer, gridMiddle, kbd } from '../../components.css';
 import { card, text } from '../notes/index.css';
-import * as bar from './index.css';
+import * as dock from './index.css';
 
 import clsx from 'clsx';
 
-function ComposerBar() {
+function ComposerDock() {
   const [isComposerOpen, setComposerOpen] = React.useState(false);
   const [shouldInitEditor, setShouldInitEditor] = React.useState(false);
   const [markdown, setMarkdown] = React.useState('');
@@ -46,11 +46,11 @@ function ComposerBar() {
   return (
     <>
       <div
-        className={clsx(bar.container, gridContainer)}
+        className={clsx(dock.container, gridContainer)}
         data-composer-open={isComposerOpen}
       >
         <motion.div
-          className={clsx(gridMiddle, bar.panel)}
+          className={clsx(gridMiddle, dock.panel)}
           layout
           transition={{
             layout: {
@@ -59,22 +59,22 @@ function ComposerBar() {
             },
           }}
         >
-          <div className={bar.panelFader} />
-          <div className={bar.panelBase}>
+          <div className={dock.panelFader} />
+          <div className={dock.panelBase}>
             <motion.div
               initial="idle"
               whileHover={!isComposerOpen ? 'peek' : undefined}
-              className={bar.composerContainer}
+              className={dock.composerContainer}
               onClick={openComposer}
             >
               {!isComposerOpen && (
-                <div className={bar.commander}>
+                <div className={dock.commander}>
                   <CommanderPlaceholder />
                 </div>
               )}
 
               <motion.div
-                className={bar.composer}
+                className={dock.composer}
                 variants={{
                   idle: { y: '80%', rotateZ: '0.5deg' },
                   peek: { y: '50%' },
@@ -95,7 +95,7 @@ function ComposerBar() {
                   {isComposerOpen && <button>attch</button>}
                 </div>
 
-                <div className={clsx(card, bar.card)}>
+                <div className={clsx(card, dock.card)}>
                   <div className={text}>
                     {isComposerOpen && shouldInitEditor ? (
                       <>
@@ -170,4 +170,4 @@ function ComposerPlaceholder({
   );
 }
 
-export { ComposerBar };
+export { ComposerDock };

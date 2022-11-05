@@ -70,7 +70,7 @@ export const composer = style({
   bottom: 0,
 
   display: 'grid',
-  gridTemplateColumns: '1fr 460px 1fr',
+  gridTemplateColumns: '1fr 520px 1fr',
   alignItems: 'end',
 
   transform: 'translateY(80%) rotateZ(0.5deg)',
