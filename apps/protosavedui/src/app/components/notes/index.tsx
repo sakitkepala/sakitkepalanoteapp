@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNotes } from './hooks/notes';
 
 import RenderMarkdown from 'react-markdown';
 
@@ -16,12 +17,24 @@ type NoteGroup = {
   noteItems: NoteItem[];
 };
 
-type NoteListProps = {
-  notes: NoteItem[];
-};
+function NoteList() {
+  const { data, isLoading, isSuccess } = useNotes();
+  const listByDate = useListByDate(data || []);
 
-function NoteList({ notes }: NoteListProps) {
-  const listByDate = useListByDate(notes);
+  React.useLayoutEffect(() => {
+    if (!data || !isSuccess) {
+      return;
+    }
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [isSuccess, data]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <h3>Memuat...</h3>
+      </div>
+    );
+  }
 
   return (
     <div className={note.noteList}>

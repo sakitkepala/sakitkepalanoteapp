@@ -1,5 +1,11 @@
 import { style } from '@vanilla-extract/css';
 
+export const shell = style({
+  minHeight: '100vh',
+  display: 'grid',
+  gridTemplateRows: '1fr min-content',
+});
+
 export const gridContainer = style({
   display: 'grid',
   gridTemplateColumns: '1fr minmax(40rem, 1fr) 1fr',

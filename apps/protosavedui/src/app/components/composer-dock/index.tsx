@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useCreateNote } from '../notes/hooks/note-mutation';
 
 import { motion } from 'framer-motion';
 import { TypingCursor } from '../typing-cursor';
@@ -10,12 +11,11 @@ import * as dock from './index.css';
 
 import clsx from 'clsx';
 
-type ComposerDock = { onSave: (markdown: string) => void };
-
-function ComposerDock({ onSave }: ComposerDock) {
+function ComposerDock() {
   const [isComposerOpen, setComposerOpen] = React.useState(false);
   const [shouldInitEditor, setShouldInitEditor] = React.useState(false);
   const [markdown, setMarkdown] = React.useState('');
+  const { create: createNote, isLoading: isSubmiting } = useCreateNote();
 
   const openComposer = () => setComposerOpen(true);
   const closeComposer = () => {
@@ -28,21 +28,9 @@ function ComposerDock({ onSave }: ComposerDock) {
     closeComposer();
   };
 
-  const [isLoading, setLoading] = React.useState(false);
-
   const handleClickSubmit = async (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
-
-    // fake submit, temporarily
-    setLoading(true);
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        onSave(markdown);
-        resolve(true);
-      }, 500);
-    });
-    setLoading(false);
-
+    await createNote(markdown);
     closeComposer();
   };
 
@@ -102,6 +90,9 @@ function ComposerDock({ onSave }: ComposerDock) {
                   <div className={text}>
                     {isComposerOpen && shouldInitEditor ? (
                       <>
+                        {isSubmiting && (
+                          <ComposerPlaceholder isLoading={isSubmiting} />
+                        )}
                         <NoteEditor onChange={setMarkdown} />
                         <div>
                           <span>Baca:</span>
@@ -115,7 +106,7 @@ function ComposerDock({ onSave }: ComposerDock) {
                     ) : (
                       <ComposerPlaceholder
                         isWaiting={isComposerOpen && !shouldInitEditor}
-                        isLoading={isLoading}
+                        isLoading={isSubmiting}
                       />
                     )}
                   </div>
@@ -125,9 +116,7 @@ function ComposerDock({ onSave }: ComposerDock) {
                   {isComposerOpen && (
                     <>
                       <button onClick={handleClickDiscard}>buang</button>
-                      <button onClick={handleClickSubmit}>
-                        {isLoading ? 'submiting...' : 'save'}
-                      </button>
+                      <button onClick={handleClickSubmit}>save</button>
                     </>
                   )}
                 </div>
