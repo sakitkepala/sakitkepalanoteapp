@@ -19,11 +19,6 @@ function NoteEditor({ onChange }: NoteEditorProps) {
     }
 
     const view = new EditorView({
-      doc:
-        '# TODO: styling theme editor\n\n' +
-        'supaya nge-blend sama theme si app\n\n' +
-        '# TODO: mock save pakai state\n\n' +
-        'supaya bisa interaksi CRUD beneran',
       extensions: [
         basicSetup,
         markdown({ codeLanguages: languages }),
