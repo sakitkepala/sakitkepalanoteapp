@@ -75,7 +75,8 @@ More complex rules can be written using the selectors key.`;
 - [ ] Klik kanan, edit note lewat pilihan di menu konteks
 - [ ] Submit pake CTRL+ENTER
 - [ ] Panel dock auto renggang ke atas kalau teks semakin panjang
-- [ ] Ngetik auto-fokus ke komposer (tanpa harus klik dock komposer)
+- [ ] Ngetik, auto-fokus ke komposer (tanpa harus klik dock komposer)
+- [ ] "Reply" catatan dengan catatan lain (mirip reply di chat)
 - [ ] Editor/komposer mode penuh
 - [ ] Drag and drop upload file + tulis note caption
       - catatan: note (konten) type/category:

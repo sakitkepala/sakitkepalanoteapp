@@ -44,7 +44,7 @@ function NoteList() {
 
           {group.noteItems.map((item: NoteItem) => (
             <div key={item.id} className={note.card}>
-              <NoteText>{item.note}</NoteText>
+              <MarkdownContent>{item.note}</MarkdownContent>
 
               <div className={note.status}>
                 {item.id === 5 && (
@@ -68,7 +68,9 @@ function NoteList() {
 
 type NoteTextProps = { children?: string };
 
-function NoteText({ children }: NoteTextProps) {
+function MarkdownContent({ children }: NoteTextProps) {
+  // Mungkin akan ada logic untuk customisasi rendering markdown di sini
+
   if (!children) {
     return null;
   }
