@@ -15,7 +15,9 @@ export type Scalars = {
 
 export type Note = {
   __typename?: 'Note';
-  text: Scalars['String'];
+  createdAt: Scalars['String'];
+  id: Scalars['ID'];
+  note: Scalars['String'];
 };
 
 export type Query = {
@@ -93,6 +95,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Note: ResolverTypeWrapper<Note>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -101,13 +104,16 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  ID: Scalars['ID'];
   Note: Note;
   Query: {};
   String: Scalars['String'];
 };
 
 export type NoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Note'] = ResolversParentTypes['Note']> = {
-  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

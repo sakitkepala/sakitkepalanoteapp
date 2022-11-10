@@ -3,5 +3,7 @@ type Query {
 }
 
 type Note {
-  text: String!
+  id: ID!
+  note: String!
+  createdAt: String!
 }

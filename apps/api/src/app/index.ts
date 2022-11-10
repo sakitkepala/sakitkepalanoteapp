@@ -33,6 +33,24 @@ function buildServer(logging = true) {
       response.headers.forEach((value, key) => {
         reply.header(key, value);
       });
+
+      /**
+       * `graphql-request` di client belum support
+       * "content-type": "application/graphql-response+json; charset=utf-8".
+       * Bawaan Yoga sama beberapa framework, ngikuti spek baru:
+       * https://github.com/graphql/graphql-over-http/blob/main/spec/GraphQLOverHTTP.md#serialization-format
+       *
+       * Issue di sini:
+       * - https://github.com/prisma-labs/graphql-request/issues/388
+       * - https://github.com/prisma-labs/graphql-request/issues/373
+       *
+       * Udah ada perbaikan, nunggu di rilis baru nanti:
+       * https://github.com/prisma-labs/graphql-request/commit/1565d490407a57b79447e5d82b1fa34d5a959005
+       *
+       * Sementara di-overide dulu gini:
+       */
+      reply.header('content-type', 'application/json');
+
       reply.status(response.status);
       reply.send(response.body);
       return reply;

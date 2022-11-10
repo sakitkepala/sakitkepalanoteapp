@@ -7316,6 +7316,16 @@ graphql-request@^5.0.0:
     extract-files "^9.0.0"
     form-data "^3.0.0"
 
+graphql-request@^5.1.0-next.3:
+  version "5.1.0-next.3"
+  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-5.1.0-next.3.tgz#31002461c04e2cd4e6ea137370578dcc7238cc60"
+  integrity sha512-DzFHEz4/fUIWvo/CiWF3FnTejsaFDel/Fcu4YY34OYiFERG8LSsmGhKvwBWWygJYyzdQ5h4P42xv11+kdBheHg==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    cross-fetch "^3.1.5"
+    extract-files "^9.0.0"
+    form-data "^3.0.0"
+
 graphql-tag@^2.11.0:
   version "2.12.6"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.12.6.tgz#d441a569c1d2537ef10ca3d1633b48725329b5f1"

@@ -33,7 +33,7 @@ function useCreateNote() {
         throw new Error(error as string);
       }
     },
-    [mutation, queryClient]
+    [mutation]
   );
 
   return React.useMemo(() => ({ ...mutation, create }), [mutation, create]);

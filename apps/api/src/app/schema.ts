@@ -4,6 +4,7 @@ import { loadSchemaSync } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 
 import type { Resolvers } from '@protosavedui/graphql';
+import Notes from './notes.mock';
 
 const GRAPHQL_DIST_PATH = 'schemas';
 
@@ -22,18 +23,15 @@ const typeDefs = loadSchemaSync(
 
 const resolvers: Resolvers = {
   Query: {
-    notes: () => {
-      return [
-        {
-          text: 'Mantap',
-        },
-      ];
-    },
-  },
-
-  Note: {
-    text: (parent) => {
-      return parent.text ? parent.text + '. Tapi boong' : parent.text;
+    notes: async () => {
+      const notes = await Notes.getAll();
+      if (!notes?.length) {
+        return [];
+      }
+      return notes.map((note) => ({
+        ...note,
+        id: note.id.toString(),
+      }));
     },
   },
 };
