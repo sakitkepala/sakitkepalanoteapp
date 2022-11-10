@@ -22,8 +22,14 @@ export type NoteItem = {
 };
 
 async function getNotes(): Promise<NoteItem[]> {
-  const { notes } = await request(GRAPHQL_API_URL, queryNotes);
-  return notes;
+  const { notes } = await request<{
+    notes: {
+      id: string;
+      note: string;
+      createdAt: string;
+    }[];
+  }>(GRAPHQL_API_URL, queryNotes);
+  return notes.map((note) => ({ ...note, id: parseInt(note.id) }));
 }
 
 function useNotes() {
