@@ -2,7 +2,7 @@ import createFastifyServer, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { createYoga } from 'graphql-yoga';
 
-import { schema, YogaContext } from './schema';
+import { schema } from './schema';
 
 function buildServer(logging = true) {
   const server: FastifyInstance = createFastifyServer({
@@ -11,14 +11,14 @@ function buildServer(logging = true) {
 
   server.register(cors);
 
-  const yoga = createYoga<YogaContext>({
-    schema,
+  const yoga = createYoga({
     logging: {
       debug: (...args) => args.forEach((arg) => server.log.debug(arg)),
       info: (...args) => args.forEach((arg) => server.log.info(arg)),
       warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
+    schema,
   });
 
   server.addContentTypeParser('multipart/form-data', {}, (req, payload, done) =>
