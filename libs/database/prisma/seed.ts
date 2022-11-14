@@ -1,7 +1,10 @@
+import { PrismaClient, Note as NoteModel } from '@prisma/client';
 import { subDays, addHours } from 'date-fns';
-import { formatServerDatetime } from '../utils';
+import { format } from 'date-fns';
 
-const DEFAULT_LOAD_TIME = 500;
+import id from 'date-fns/locale/id';
+
+const prisma = new PrismaClient();
 
 export type NoteItem = {
   id: number;
@@ -9,47 +12,25 @@ export type NoteItem = {
   createdAt: string;
 };
 
-let data: NoteItem[] = makeMockNotes();
+async function main(): Promise<void> {
+  const notes: NoteItem[] = _makeMockNotes();
 
-const Notes = {
-  async getAll(): Promise<NoteItem[]> {
-    await fakeLoading();
-    return _getAll();
-  },
-
-  async getById(id: number): Promise<NoteItem | null> {
-    await fakeLoading();
-    return _getById(id);
-  },
-
-  async create(markdown: string): Promise<NoteItem> {
-    await fakeLoading();
-    return _create(markdown);
-  },
-};
-
-function _getAll(): NoteItem[] {
-  return [...data].map((item) => ({ ...item }));
+  try {
+    for (const noteItem of notes) {
+      const created: NoteModel = await prisma.note.create({
+        data: { note: noteItem.note },
+      });
+      console.log(`[SUKSES] ${created}`);
+    }
+    await prisma.$disconnect();
+  } catch (dbError) {
+    console.error(dbError);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
 }
 
-function _getById(id: number): NoteItem | null {
-  const allNotes = _getAll();
-  const note = allNotes.find((note) => note.id === id);
-  return note || null;
-}
-
-function _create(markdown: string): NoteItem {
-  const allNotes = _getAll();
-  const newNote: NoteItem = {
-    id: allNotes.length + 1,
-    note: markdown,
-    createdAt: formatServerDatetime(new Date()),
-  };
-  data = [...data, newNote];
-  return _getById(newNote.id) as NoteItem;
-}
-
-function makeMockNotes(): NoteItem[] {
+function _makeMockNotes(): NoteItem[] {
   const today = new Date();
   const kemarin = subDays(today, 1);
   const kemarinLusa = subDays(today, 2);
@@ -63,7 +44,7 @@ More complex rules can be written using the selectors key.`;
     const date: Date = addHours(kemarin, index);
     const item: NoteItem = {
       id: index + 1,
-      createdAt: formatServerDatetime(date),
+      createdAt: _formatServerDatetime(date),
       note:
         index === 1 || index === 4
           ? 'Pura-puranya markdown\n\n## Pake heading dong wkwk\n\nParagraf biasa tapi [pake link](https://sakitkepala.dev)'
@@ -74,7 +55,7 @@ More complex rules can be written using the selectors key.`;
       const date = addHours(kemarinLusa, index);
       return {
         ...item,
-        createdAt: formatServerDatetime(date),
+        createdAt: _formatServerDatetime(date),
         note: `# Wishlist fitur:\n\n\`\`\`
 - [ ] Klik kanan, edit note lewat pilihan di menu konteks
 - [ ] Submit pake CTRL+ENTER
@@ -104,7 +85,7 @@ More complex rules can be written using the selectors key.`;
       const date = addHours(kemarinLusa, index);
       return {
         ...item,
-        createdAt: formatServerDatetime(date),
+        createdAt: _formatServerDatetime(date),
       };
     }
 
@@ -119,7 +100,7 @@ More complex rules can be written using the selectors key.`;
     if (index === 6) {
       return {
         ...item,
-        createdAt: formatServerDatetime(today),
+        createdAt: _formatServerDatetime(today),
         note: `## TODO:\n\n\`\`\`
 - [ ] Saatnya bikin server GraphQL
 - [ ] Pindah data mock notes ke server
@@ -131,12 +112,8 @@ More complex rules can be written using the selectors key.`;
   });
 }
 
-function fakeLoading(LOAD_TIME = DEFAULT_LOAD_TIME) {
-  return new Promise((resolve) => {
-    const timer = setTimeout(() => {
-      resolve(timer);
-    }, LOAD_TIME);
-  });
+function _formatServerDatetime(date: Date): string {
+  return format(date, 'yyyy-MM-dd HH:mm:ss', { locale: id });
 }
 
-export default Notes;
+main();

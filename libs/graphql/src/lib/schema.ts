@@ -7,10 +7,6 @@ import { join } from 'path';
 import type { Resolvers } from './resolvers';
 import type { Note as NoteModel } from '@prisma/client';
 
-// TODO: hapus mock
-// ? pindah ke "seed" di Prisma?
-import { mock } from '@protosavedui/utils';
-
 const GRAPHQL_DIST_PATH = 'schemas';
 
 function createSchema() {
@@ -32,12 +28,7 @@ function createSchema() {
       notes: async (_, __, context) => {
         const notes = await context.prisma.note.findMany();
         if (!notes?.length) {
-          // TODO: hapus ganti ini:
-          // return [];
-          return (await mock.Notes.getAll()).map((note) => ({
-            ...note,
-            id: note.id.toString(),
-          }));
+          return [];
         }
         return notes.map((note: NoteModel) => ({
           ...note,
