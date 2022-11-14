@@ -1,8 +1,9 @@
 import createFastifyServer, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { createYoga } from 'graphql-yoga';
+import { createSchema, createContext, AppContext } from '@protosavedui/graphql';
 
-import { schema } from './schema';
+import type { FastifyServerContext } from '@protosavedui/types';
 
 function buildServer(logging = true) {
   const server: FastifyInstance = createFastifyServer({
@@ -11,16 +12,20 @@ function buildServer(logging = true) {
 
   server.register(cors);
 
-  const yoga = createYoga({
+  const yoga = createYoga<FastifyServerContext, AppContext>({
     logging: {
       debug: (...args) => args.forEach((arg) => server.log.debug(arg)),
       info: (...args) => args.forEach((arg) => server.log.info(arg)),
       warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
-    schema,
+    schema: createSchema,
+    context: createContext,
   });
 
+  // Bypass Fastify ketika handle request multipart karena akan di-handle Yoga.
+  // Referensi:
+  // https://the-guild.dev/graphql/yoga-server/v3/integrations/integration-with-fastify#add-dummy-content-type-parser-for-file-uploads
   server.addContentTypeParser('multipart/form-data', {}, (req, payload, done) =>
     done(null)
   );
@@ -29,7 +34,10 @@ function buildServer(logging = true) {
     url: '/graphql',
     method: ['GET', 'POST', 'OPTIONS'],
     handler: async (req, reply) => {
-      const response = await yoga.handleNodeRequest(req, { req, reply });
+      const response: Response = await yoga.handleNodeRequest(req, {
+        req,
+        reply,
+      });
       response.headers.forEach((value, key) => {
         reply.header(key, value);
       });
