@@ -13,10 +13,10 @@ export type NoteItem = {
 };
 
 async function main(): Promise<void> {
-  const notes: NoteItem[] = _makeMockNotes();
-
+  const mockNotes: NoteItem[] = _makeMockNotes();
   try {
-    for (const noteItem of notes) {
+    await prisma.note.deleteMany({});
+    for (const noteItem of mockNotes) {
       const created: NoteModel = await prisma.note.create({
         data: { note: noteItem.note },
       });
