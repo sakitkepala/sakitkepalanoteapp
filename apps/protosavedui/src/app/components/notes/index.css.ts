@@ -1,18 +1,28 @@
 import { style } from '@vanilla-extract/css';
+import * as global from '../../app.css';
 
 export const noteList = style({
   marginInline: 'auto',
-  padding: '2rem 1rem',
+  padding: '2rem 4rem',
   display: 'flex',
   flexDirection: 'column',
-  gap: '2.25rem',
+  alignItems: 'flex-end',
+  gap: '1.25rem',
 });
 
 export const separatorBlock = style({
+  width: '100%',
   paddingBlock: '1rem',
-  color: '#bcd2ee',
+  color: global.primaryBlue3,
   fontWeight: 700,
   textAlign: 'center',
+});
+
+export const bubble = style({
+  display: 'inline-block',
+  padding: '0.5rem 1rem',
+  borderRadius: '1rem',
+  backgroundColor: 'rgb(255, 255, 255, 0.5)',
 });
 
 export const card = style({
@@ -20,17 +30,24 @@ export const card = style({
   flexDirection: 'column',
   gap: '1rem',
 
-  borderRadius: '0.4rem',
-  border: '1px solid #e0f2fe',
-  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+  minWidth: '65%',
+  borderRadius: '0.5rem',
+  border: '1px solid ' + global.primaryBlue1,
   backgroundColor: '#ffffff',
+
+  transition: 'box-shadow 0.3s, border-color 0.15s',
+
+  ':hover': {
+    boxShadow: '0 3px 3px 0 rgb(0, 0, 0, 0.04)',
+    borderColor: global.primaryBlue2,
+  },
 });
 
 export const text = style({
   selectors: {
     [`${card} &`]: {
-      paddingTop: '2.25rem',
-      paddingInline: '2rem',
+      paddingTop: '1.25rem',
+      paddingInline: '1.5rem',
       lineHeight: 1.6,
     },
   },

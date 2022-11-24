@@ -7,6 +7,8 @@ export type NoteItem = {
   id: number;
   note: string;
   createdAt: string;
+  modifiedAt: string;
+  isEdited: boolean;
 };
 
 let data: NoteItem[] = makeMockNotes();
@@ -40,10 +42,13 @@ function _getById(id: number): NoteItem | null {
 
 function _create(markdown: string): NoteItem {
   const allNotes = _getAll();
+  const now = new Date();
   const newNote: NoteItem = {
     id: allNotes.length + 1,
     note: markdown,
-    createdAt: formatServerDatetime(new Date()),
+    createdAt: formatServerDatetime(now),
+    modifiedAt: formatServerDatetime(now),
+    isEdited: false,
   };
   data = [...data, newNote];
   return _getById(newNote.id) as NoteItem;
@@ -64,6 +69,8 @@ More complex rules can be written using the selectors key.`;
     const item: NoteItem = {
       id: index + 1,
       createdAt: formatServerDatetime(date),
+      modifiedAt: formatServerDatetime(date),
+      isEdited: false,
       note:
         index === 1 || index === 4
           ? 'Pura-puranya markdown\n\n## Pake heading dong wkwk\n\nParagraf biasa tapi [pake link](https://sakitkepala.dev)'

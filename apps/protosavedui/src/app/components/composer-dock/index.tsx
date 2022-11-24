@@ -162,4 +162,5 @@ function ComposerPlaceholder({
   );
 }
 
+export { ComposerDockSimple } from './simple';
 export { ComposerDock };

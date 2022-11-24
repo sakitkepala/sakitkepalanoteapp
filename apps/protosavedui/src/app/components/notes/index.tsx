@@ -40,21 +40,21 @@ function NoteList() {
     <div className={note.noteList}>
       {listByDate.map((group, index) => (
         <React.Fragment key={index}>
-          <div className={note.separatorBlock}>{group.day}</div>
+          <div className={note.separatorBlock}>
+            <span className={note.bubble}>{group.day}</span>
+          </div>
 
           {group.noteItems.map((item: NoteItem) => (
             <div key={item.id} className={note.card}>
               <MarkdownContent>{item.note}</MarkdownContent>
 
               <div className={note.status}>
-                {item.id === 5 && (
-                  <>
-                    {/* Fake edit */}
-                    {/* TODO: ganti status asli dari data API */}
+                {item.isEdited && (
+                  <React.Fragment>
                     <span>
                       <u>diedit</u>
                     </span>{' '}
-                  </>
+                  </React.Fragment>
                 )}
                 <span>{item.createdAt}</span>
               </div>

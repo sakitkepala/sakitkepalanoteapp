@@ -9,6 +9,8 @@ const queryNotes = gql`
       id
       note
       createdAt
+      modifiedAt
+      isEdited
     }
   }
 `;
@@ -19,6 +21,8 @@ export type NoteItem = {
   id: number;
   note: string;
   createdAt: string;
+  modifiedAt: string;
+  isEdited: boolean;
 };
 
 async function getNotes(): Promise<NoteItem[]> {
@@ -27,6 +31,8 @@ async function getNotes(): Promise<NoteItem[]> {
       id: string;
       note: string;
       createdAt: string;
+      modifiedAt: string;
+      isEdited: boolean;
     }[];
   }>(GRAPHQL_API_URL, queryNotes);
   return notes.map((note) => ({ ...note, id: parseInt(note.id) }));

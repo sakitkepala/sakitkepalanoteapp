@@ -87,7 +87,7 @@ export const menuLink = style({
       transition: 'color 0.15s ease',
     },
     [`${sideMenus} a.&:hover`]: {
-      color: '#ff595e',
+      color: '#ed4245',
     },
   },
 });

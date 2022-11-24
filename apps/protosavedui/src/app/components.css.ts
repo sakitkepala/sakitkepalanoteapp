@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import * as global from './app.css';
 
 export const shell = style({
   minHeight: '100vh',
@@ -23,6 +24,7 @@ export const gridMiddle = style({
 export const stickyBottom = style({
   position: 'sticky',
   bottom: 0,
+  backgroundColor: global.primaryBlue,
 });
 
 export const kbd = style({
