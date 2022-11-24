@@ -1,15 +1,18 @@
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import {
+  makeExecutableSchema,
+  GraphQLSchemaWithContext,
+} from '@graphql-tools/schema';
 import { loadSchemaSync } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import type { Note as NoteModel } from '@prisma/client';
+import type { Resolvers } from './types/resolvers';
+import type { GraphQLContext } from './context';
 
 import { join } from 'path';
 
-import type { Resolvers } from './resolvers';
-import type { Note as NoteModel } from '@prisma/client';
-
 const GRAPHQL_DIST_PATH = 'schemas';
 
-function createSchema() {
+function createSchema(): GraphQLSchemaWithContext<GraphQLContext> {
   // `loadSchemaSync` itu kayak `readFileSync` dari `fs`.
   // Kata kuncinya itu "read file", yang terjadinya waktu *runtime*.
   // Ketika sudah dibuild, dia cari direktori relatif terhadap file
@@ -26,15 +29,35 @@ function createSchema() {
   const resolvers: Resolvers = {
     Query: {
       notes: async (_, __, context) => {
-        const notes = await context.prisma.note.findMany();
+        // TODO: handle error
+
+        const notes: NoteModel[] = await context.prisma.note.findMany();
         if (!notes?.length) {
           return [];
         }
-        return notes.map((note: NoteModel) => ({
+        return notes.map((note) => ({
           ...note,
           id: note.id.toString(),
           createdAt: note.createdAt.toISOString(),
         }));
+      },
+    },
+
+    Mutation: {
+      createNote: async (_, args, context) => {
+        // TODO: handle error
+
+        const createdNote = await context.prisma.note.create({
+          data: {
+            note: args.note,
+          },
+        });
+
+        return {
+          ...createdNote,
+          id: createdNote.id.toString(),
+          createdAt: createdNote.createdAt.toISOString(),
+        };
       },
     },
   };

@@ -7,3 +7,7 @@ type Note {
   note: String!
   createdAt: String!
 }
+
+type Mutation {
+  createNote(note: String!): Note!
+}
