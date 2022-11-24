@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@protosavedui/database": ["libs/database/src/index.ts"],
+      "@protosavedui/graphql": ["libs/graphql/src/index.ts"],
+      "@protosavedui/types": ["libs/types/src/index.ts"],
+      "@protosavedui/utils": ["libs/utils/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

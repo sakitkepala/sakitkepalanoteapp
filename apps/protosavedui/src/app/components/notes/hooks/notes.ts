@@ -1,6 +1,17 @@
+import { request, gql } from 'graphql-request';
 import { useQuery } from '@tanstack/react-query';
 
-import Notes from './notes.mock';
+const GRAPHQL_API_URL = 'http://localhost:6789/graphql';
+
+const queryNotes = gql`
+  query {
+    notes {
+      id
+      note
+      createdAt
+    }
+  }
+`;
 
 const NOTES_QUERY_KEY = ['notes'];
 
@@ -10,8 +21,15 @@ export type NoteItem = {
   createdAt: string;
 };
 
-function getNotes(): Promise<NoteItem[]> {
-  return Notes.getAll();
+async function getNotes(): Promise<NoteItem[]> {
+  const { notes } = await request<{
+    notes: {
+      id: string;
+      note: string;
+      createdAt: string;
+    }[];
+  }>(GRAPHQL_API_URL, queryNotes);
+  return notes.map((note) => ({ ...note, id: parseInt(note.id) }));
 }
 
 function useNotes() {

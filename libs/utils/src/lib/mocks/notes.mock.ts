@@ -1,9 +1,13 @@
 import { subDays, addHours } from 'date-fns';
 import { formatServerDatetime } from '../utils';
 
-import type { NoteItem } from './notes';
-
 const DEFAULT_LOAD_TIME = 500;
+
+export type NoteItem = {
+  id: number;
+  note: string;
+  createdAt: string;
+};
 
 let data: NoteItem[] = makeMockNotes();
 
@@ -49,7 +53,7 @@ function makeMockNotes(): NoteItem[] {
   const today = new Date();
   const kemarin = subDays(today, 1);
   const kemarinLusa = subDays(today, 2);
-  const longMarkdown: string = `When using CSS property values that don’t exist in some browsers, you’ll often declare the property twice and the older browser will ignore the value it doesn’t understand. This isn’t possible using JS objects as you can’t declare the same key twice. So instead, we use an array to define fallback values.
+  const longMarkdown = `When using CSS property values that don’t exist in some browsers, you’ll often declare the property twice and the older browser will ignore the value it doesn’t understand. This isn’t possible using JS objects as you can’t declare the same key twice. So instead, we use an array to define fallback values.
 
 ## Complex Selectors
 

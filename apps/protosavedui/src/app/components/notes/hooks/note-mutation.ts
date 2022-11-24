@@ -4,13 +4,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { NoteItem } from './notes';
 import { NOTES_QUERY_KEY } from './notes';
 
-import Notes from './notes.mock';
+// TODO: hapus mock. Ganti pakai request mutasi graphql.
+import { mock } from '@protosavedui/utils';
 
 function postNote(markdown: string): Promise<NoteItem> {
   if (!markdown) {
     throw new Error('Note gak boleh kosong to, bosque.');
   }
-  return Notes.create(markdown);
+  // TODO: hapus mock. Ganti pakai request mutasi graphql.
+  return mock.Notes.create(markdown);
 }
 
 function useCreateNote() {
@@ -33,7 +35,7 @@ function useCreateNote() {
         throw new Error(error as string);
       }
     },
-    [mutation, queryClient]
+    [mutation]
   );
 
   return React.useMemo(() => ({ ...mutation, create }), [mutation, create]);
