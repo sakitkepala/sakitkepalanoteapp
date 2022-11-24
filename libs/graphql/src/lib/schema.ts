@@ -9,6 +9,7 @@ import type { Resolvers } from './types/resolvers';
 import type { GraphQLContext } from './context';
 
 import { join } from 'path';
+import { isAfter } from 'date-fns';
 
 const GRAPHQL_DIST_PATH = 'schemas';
 
@@ -37,8 +38,7 @@ function createSchema(): GraphQLSchemaWithContext<GraphQLContext> {
         }
         return notes.map((note) => ({
           ...note,
-          id: note.id.toString(),
-          createdAt: note.createdAt.toISOString(),
+          ..._buildNoteMeta(note),
         }));
       },
     },
@@ -55,14 +55,41 @@ function createSchema(): GraphQLSchemaWithContext<GraphQLContext> {
 
         return {
           ...createdNote,
-          id: createdNote.id.toString(),
-          createdAt: createdNote.createdAt.toISOString(),
+          ..._buildNoteMeta(createdNote),
+        };
+      },
+
+      editNote: async (_, args, context) => {
+        // TODO: handle error
+
+        const updatedNote: NoteModel = await context.prisma.note.update({
+          where: { id: parseInt(args.id) },
+          data: { note: args.note },
+        });
+
+        return {
+          ...updatedNote,
+          ..._buildNoteMeta(updatedNote),
         };
       },
     },
   };
 
   return makeExecutableSchema({ typeDefs, resolvers });
+}
+
+function _buildNoteMeta(note: NoteModel): {
+  id: string;
+  createdAt: string;
+  modifiedAt: string;
+  isEdited: boolean;
+} {
+  return {
+    id: note.id.toString(),
+    createdAt: note.createdAt.toISOString(),
+    modifiedAt: note.modifiedAt.toISOString(),
+    isEdited: isAfter(note.modifiedAt, note.createdAt),
+  };
 }
 
 export { createSchema };

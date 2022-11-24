@@ -18,6 +18,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   createNote: Note;
+  editNote: Note;
 };
 
 
@@ -25,10 +26,18 @@ export type MutationCreateNoteArgs = {
   note: Scalars['String'];
 };
 
+
+export type MutationEditNoteArgs = {
+  id: Scalars['ID'];
+  note: Scalars['String'];
+};
+
 export type Note = {
   __typename?: 'Note';
   createdAt: Scalars['String'];
   id: Scalars['ID'];
+  isEdited: Scalars['Boolean'];
+  modifiedAt: Scalars['String'];
   note: Scalars['String'];
 };
 
@@ -126,11 +135,14 @@ export type ResolversParentTypes = {
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createNote?: Resolver<ResolversTypes['Note'], ParentType, ContextType, RequireFields<MutationCreateNoteArgs, 'note'>>;
+  editNote?: Resolver<ResolversTypes['Note'], ParentType, ContextType, RequireFields<MutationEditNoteArgs, 'id' | 'note'>>;
 };
 
 export type NoteResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Note'] = ResolversParentTypes['Note']> = {
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isEdited?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  modifiedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

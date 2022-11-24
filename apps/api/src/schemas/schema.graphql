@@ -6,8 +6,11 @@ type Note {
   id: ID!
   note: String!
   createdAt: String!
+  modifiedAt: String!
+  isEdited: Boolean!
 }
 
 type Mutation {
   createNote(note: String!): Note!
+  editNote(id: ID!, note: String!): Note!
 }
