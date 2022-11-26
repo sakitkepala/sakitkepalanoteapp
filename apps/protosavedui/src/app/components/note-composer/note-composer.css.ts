@@ -24,7 +24,7 @@ export const editorScrollableArea = style({
   maxHeight: '400px',
 });
 
-export const editorContainer = style({
+export const cmContainer = style({
   minHeight: composerButtonSize,
 });
 
