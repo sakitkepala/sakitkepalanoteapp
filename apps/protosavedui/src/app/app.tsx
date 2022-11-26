@@ -1,9 +1,11 @@
 import { SideBarLeft, SideBarRight } from './components/sidebar';
 import { NoteList } from './components/notes';
-import { ComposerDockSimple } from './components/composer-dock';
+import { NoteComposer } from './components/note-composer';
 
 import './app.css';
 import * as component from './components.css';
+
+import { clsx } from 'clsx';
 
 export function App() {
   return (
@@ -21,8 +23,10 @@ export function App() {
           <SideBarRight />
         </div>
 
-        <div className={component.stickyBottom}>
-          <ComposerDockSimple />
+        <div className={clsx(component.stickyBottom, component.gridContainer)}>
+          <div className={component.gridMiddle}>
+            <NoteComposer />
+          </div>
         </div>
       </div>
     </>

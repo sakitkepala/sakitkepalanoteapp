@@ -31,7 +31,7 @@ export const card = style({
   gap: '1rem',
 
   minWidth: '65%',
-  borderRadius: '0.5rem',
+  borderRadius: '0.375rem',
   border: '1px solid ' + global.primaryBlue1,
   backgroundColor: '#ffffff',
 
