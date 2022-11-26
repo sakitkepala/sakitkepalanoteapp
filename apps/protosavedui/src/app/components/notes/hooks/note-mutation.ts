@@ -1,18 +1,42 @@
 import * as React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { request, gql } from 'graphql-request';
 
 import type { NoteItem } from './notes';
 import { NOTES_QUERY_KEY } from './notes';
 
-// TODO: hapus mock. Ganti pakai request mutasi graphql.
-import { mock } from '@protosavedui/utils';
+const GRAPHQL_API_URL = 'http://localhost:6789/graphql';
 
-function postNote(markdown: string): Promise<NoteItem> {
+const mutationCreateNote = gql`
+  mutation createNote($content: String!) {
+    createNote(note: $content) {
+      id
+      note
+      createdAt
+      modifiedAt
+      isEdited
+    }
+  }
+`;
+
+async function postNote(markdown: string): Promise<NoteItem> {
   if (!markdown) {
     throw new Error('Note gak boleh kosong to, bosque.');
   }
-  // TODO: hapus mock. Ganti pakai request mutasi graphql.
-  return mock.Notes.create(markdown);
+
+  const { createNote } = await request<{
+    createNote: {
+      id: string;
+      note: string;
+      createdAt: string;
+      modifiedAt: string;
+      isEdited: boolean;
+    };
+  }>(GRAPHQL_API_URL, mutationCreateNote, {
+    content: markdown,
+  });
+
+  return { ...createNote, id: parseInt(createNote.id) };
 }
 
 function useCreateNote() {
