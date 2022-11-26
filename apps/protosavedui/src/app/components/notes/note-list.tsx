@@ -3,19 +3,14 @@ import { useNotes } from './hooks/notes';
 
 import RenderMarkdown from 'react-markdown';
 
-import * as global from '../../app.css';
-import * as note from './index.css';
+import * as globalStyle from '../../app.css';
+import * as note from './note-list.css';
 
 import clsx from 'clsx';
 import { parseISO, format, isYesterday, isToday } from 'date-fns';
 import id from 'date-fns/locale/id';
 
 import type { NoteItem } from './hooks/notes';
-
-type NoteGroup = {
-  day: string;
-  noteItems: NoteItem[];
-};
 
 function NoteList() {
   const { data, isLoading, isSuccess } = useNotes();
@@ -66,9 +61,9 @@ function NoteList() {
   );
 }
 
-type NoteTextProps = { children?: string };
+type MarkdownContentProps = { children?: string };
 
-function MarkdownContent({ children }: NoteTextProps) {
+function MarkdownContent({ children }: MarkdownContentProps) {
   // Mungkin akan ada logic untuk customisasi rendering markdown di sini
 
   if (!children) {
@@ -76,7 +71,7 @@ function MarkdownContent({ children }: NoteTextProps) {
   }
 
   return (
-    <div className={clsx(note.text, global.flow)}>
+    <div className={clsx(note.text, globalStyle.flow)}>
       <RenderMarkdown>{children}</RenderMarkdown>
     </div>
   );
@@ -85,8 +80,13 @@ function MarkdownContent({ children }: NoteTextProps) {
 /* =============================== */
 // hooks
 
+type NoteGroup = {
+  day: string;
+  noteItems: NoteItem[];
+};
+
 function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
-  return React.useMemo<NoteGroup[]>(() => {
+  const noteGroup = React.useMemo<NoteGroup[]>(() => {
     if (!notes?.length) {
       return [];
     }
@@ -120,6 +120,8 @@ function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
 
     return groups;
   }, [notes]);
+
+  return noteGroup;
 }
 
 /* =============================== */
