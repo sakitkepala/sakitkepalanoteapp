@@ -25,7 +25,7 @@ function Editor({
   const initialContentImmutable = React.useRef(initialContent);
   const [internalContent, setInternalContent] = React.useState<
     string | undefined
-  >();
+  >(initialContent);
 
   React.useEffect(() => {
     if (!cmContainer.current) {

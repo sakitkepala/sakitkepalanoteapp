@@ -25,12 +25,16 @@ export const bubble = style({
   backgroundColor: 'rgb(255, 255, 255, 0.5)',
 });
 
+export const itemWrapper = style({
+  display: 'flex',
+});
+
 export const card = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
 
-  minWidth: '65%',
+  minWidth: '36ch',
   borderRadius: '0.375rem',
   border: '1px solid ' + global.primaryBlue1,
   backgroundColor: '#ffffff',
@@ -65,6 +69,48 @@ export const status = style({
       fontSize: '0.75em',
       fontFamily: 'mono',
       textAlign: 'right',
+    },
+  },
+});
+
+export const floatingMenuBase = style({
+  position: 'relative',
+  zIndex: 1,
+});
+
+export const floatingMenuContainer = style({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+
+  opacity: 0,
+  padding: '0.25rem 0.625rem',
+  height: '100%',
+  fontSize: '0.8em',
+
+  transition: 'opacity 0.15s',
+
+  selectors: {
+    [`${itemWrapper}:hover &`]: {
+      opacity: 1,
+    },
+  },
+});
+
+export const menuButton = style({
+  selectors: {
+    [`${floatingMenuContainer} &`]: {
+      margin: 0,
+      padding: '0.25rem 0',
+      border: 'none',
+      backgroundColor: 'inherit',
+      fontSize: 'inherit',
+      color: global.primaryBlue3,
+      cursor: 'pointer',
+    },
+
+    [`${floatingMenuContainer} &:hover`]: {
+      textDecoration: 'underline',
     },
   },
 });

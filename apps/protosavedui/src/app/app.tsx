@@ -1,3 +1,4 @@
+import { WorkspaceProvider } from './contexts/workspace';
 import { SideBarLeft, SideBarRight } from './components/sidebar';
 import { NoteList } from './components/notes';
 import { NoteComposer } from './components/note-composer';
@@ -13,21 +14,25 @@ export function App() {
       <header></header>
 
       <div className={component.shell}>
-        <div className={component.gridContainer}>
-          <SideBarLeft />
+        <WorkspaceProvider>
+          <div className={component.gridContainer}>
+            <SideBarLeft />
 
-          <div>
-            <NoteList />
+            <div>
+              <NoteList />
+            </div>
+
+            <SideBarRight />
           </div>
 
-          <SideBarRight />
-        </div>
-
-        <div className={clsx(component.stickyBottom, component.gridContainer)}>
-          <div className={component.gridMiddle}>
-            <NoteComposer />
+          <div
+            className={clsx(component.stickyBottom, component.gridContainer)}
+          >
+            <div className={component.gridMiddle}>
+              <NoteComposer />
+            </div>
           </div>
-        </div>
+        </WorkspaceProvider>
       </div>
     </>
   );
