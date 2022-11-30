@@ -1,9 +1,12 @@
+import { WorkspaceProvider } from './contexts/workspace';
 import { SideBarLeft, SideBarRight } from './components/sidebar';
 import { NoteList } from './components/notes';
-import { ComposerDock } from './components/composer-dock';
+import { NoteComposer } from './components/note-composer';
 
 import './app.css';
 import * as component from './components.css';
+
+import { clsx } from 'clsx';
 
 export function App() {
   return (
@@ -11,19 +14,25 @@ export function App() {
       <header></header>
 
       <div className={component.shell}>
-        <div className={component.gridContainer}>
-          <SideBarLeft />
+        <WorkspaceProvider>
+          <div className={component.gridContainer}>
+            <SideBarLeft />
 
-          <div>
-            <NoteList />
+            <div>
+              <NoteList />
+            </div>
+
+            <SideBarRight />
           </div>
 
-          <SideBarRight />
-        </div>
-
-        <div className={component.stickyBottom}>
-          <ComposerDock />
-        </div>
+          <div
+            className={clsx(component.stickyBottom, component.gridContainer)}
+          >
+            <div className={component.gridMiddle}>
+              <NoteComposer />
+            </div>
+          </div>
+        </WorkspaceProvider>
       </div>
     </>
   );

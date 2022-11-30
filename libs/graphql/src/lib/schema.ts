@@ -41,6 +41,21 @@ function createSchema(): GraphQLSchemaWithContext<GraphQLContext> {
           ..._buildNoteMeta(note),
         }));
       },
+
+      note: async (_, args, context) => {
+        const foundNote = await context.prisma.note.findUnique({
+          where: { id: parseInt(args.id) },
+        });
+
+        if (!foundNote) {
+          throw new Error('Note gak ditemukan');
+        }
+
+        return {
+          ...foundNote,
+          ..._buildNoteMeta(foundNote),
+        };
+      },
     },
 
     Mutation: {

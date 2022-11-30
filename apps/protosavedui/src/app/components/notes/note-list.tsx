@@ -1,21 +1,17 @@
 import * as React from 'react';
 import { useNotes } from './hooks/notes';
+import { useWorkspace } from '../../contexts/workspace';
 
 import RenderMarkdown from 'react-markdown';
 
-import * as global from '../../app.css';
-import * as note from './index.css';
+import * as globalStyle from '../../app.css';
+import * as noteStyle from './note-list.css';
 
 import clsx from 'clsx';
 import { parseISO, format, isYesterday, isToday } from 'date-fns';
 import id from 'date-fns/locale/id';
 
 import type { NoteItem } from './hooks/notes';
-
-type NoteGroup = {
-  day: string;
-  noteItems: NoteItem[];
-};
 
 function NoteList() {
   const { data, isLoading, isSuccess } = useNotes();
@@ -37,28 +33,15 @@ function NoteList() {
   }
 
   return (
-    <div className={note.noteList}>
+    <div className={noteStyle.noteList}>
       {listByDate.map((group, index) => (
         <React.Fragment key={index}>
-          <div className={note.separatorBlock}>{group.day}</div>
+          <div className={noteStyle.separatorBlock}>
+            <span className={noteStyle.bubble}>{group.day}</span>
+          </div>
 
           {group.noteItems.map((item: NoteItem) => (
-            <div key={item.id} className={note.card}>
-              <MarkdownContent>{item.note}</MarkdownContent>
-
-              <div className={note.status}>
-                {item.id === 5 && (
-                  <>
-                    {/* Fake edit */}
-                    {/* TODO: ganti status asli dari data API */}
-                    <span>
-                      <u>diedit</u>
-                    </span>{' '}
-                  </>
-                )}
-                <span>{item.createdAt}</span>
-              </div>
-            </div>
+            <Note key={item.id} note={item} />
           ))}
         </React.Fragment>
       ))}
@@ -66,9 +49,52 @@ function NoteList() {
   );
 }
 
-type NoteTextProps = { children?: string };
+type NoteProps = {
+  note: NoteItem;
+};
 
-function MarkdownContent({ children }: NoteTextProps) {
+function Note({ note }: NoteProps) {
+  const { editNoteId, setEdit, unsetEdit } = useWorkspace();
+
+  const handleClickEdit = () => {
+    if (editNoteId === note.id) {
+      unsetEdit();
+    } else {
+      setEdit(note.id);
+    }
+  };
+
+  return (
+    <div className={noteStyle.itemWrapper}>
+      <div className={noteStyle.card}>
+        <MarkdownContent>{note.note}</MarkdownContent>
+
+        <div className={noteStyle.status}>
+          {note.isEdited && (
+            <React.Fragment>
+              <span>
+                <u>diedit</u>
+              </span>{' '}
+            </React.Fragment>
+          )}
+          <span>{note.createdAt}</span>
+        </div>
+      </div>
+
+      <div className={noteStyle.floatingMenuBase}>
+        <div className={noteStyle.floatingMenuContainer}>
+          <button className={noteStyle.menuButton} onClick={handleClickEdit}>
+            edit
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type MarkdownContentProps = { children?: string };
+
+function MarkdownContent({ children }: MarkdownContentProps) {
   // Mungkin akan ada logic untuk customisasi rendering markdown di sini
 
   if (!children) {
@@ -76,7 +102,7 @@ function MarkdownContent({ children }: NoteTextProps) {
   }
 
   return (
-    <div className={clsx(note.text, global.flow)}>
+    <div className={clsx(noteStyle.text, globalStyle.flow)}>
       <RenderMarkdown>{children}</RenderMarkdown>
     </div>
   );
@@ -85,8 +111,13 @@ function MarkdownContent({ children }: NoteTextProps) {
 /* =============================== */
 // hooks
 
+type NoteGroup = {
+  day: string;
+  noteItems: NoteItem[];
+};
+
 function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
-  return React.useMemo<NoteGroup[]>(() => {
+  const noteGroup = React.useMemo<NoteGroup[]>(() => {
     if (!notes?.length) {
       return [];
     }
@@ -120,6 +151,8 @@ function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
 
     return groups;
   }, [notes]);
+
+  return noteGroup;
 }
 
 /* =============================== */

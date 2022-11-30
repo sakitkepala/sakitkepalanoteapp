@@ -43,7 +43,13 @@ export type Note = {
 
 export type Query = {
   __typename?: 'Query';
+  note: Note;
   notes: Array<Note>;
+};
+
+
+export type QueryNoteArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -148,6 +154,7 @@ export type NoteResolvers<ContextType = GraphQLContext, ParentType extends Resol
 };
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  note?: Resolver<ResolversTypes['Note'], ParentType, ContextType, RequireFields<QueryNoteArgs, 'id'>>;
   notes?: Resolver<Array<ResolversTypes['Note']>, ParentType, ContextType>;
 };
 
