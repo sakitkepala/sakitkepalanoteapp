@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { request, gql } from 'graphql-request';
 import { useQuery } from '@tanstack/react-query';
 
@@ -60,7 +61,13 @@ function useNote(id?: number) {
     }
   );
 
-  return query;
+  return React.useMemo(
+    () => ({
+      data: id ? query.data : null,
+      isLoading: query.isLoading,
+    }),
+    [id, query.data, query.isLoading]
+  );
 }
 
 export { useNote };

@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import * as global from '../../app.css';
+import * as globalStyles from '@noteapp/global-styles';
 
 export const noteList = style({
   marginInline: 'auto',
@@ -13,7 +13,7 @@ export const noteList = style({
 export const separatorBlock = style({
   width: '100%',
   paddingBlock: '1rem',
-  color: global.primaryBlue3,
+  color: globalStyles.primaryBlue3,
   fontWeight: 700,
   textAlign: 'center',
 });
@@ -36,14 +36,14 @@ export const card = style({
 
   minWidth: '36ch',
   borderRadius: '0.375rem',
-  border: '1px solid ' + global.primaryBlue1,
+  border: '1px solid ' + globalStyles.primaryBlue1,
   backgroundColor: '#ffffff',
 
   transition: 'box-shadow 0.3s, border-color 0.15s',
 
   ':hover': {
     boxShadow: '0 3px 3px 0 rgb(0, 0, 0, 0.04)',
-    borderColor: global.primaryBlue2,
+    borderColor: globalStyles.primaryBlue2,
   },
 });
 
@@ -105,7 +105,7 @@ export const menuButton = style({
       border: 'none',
       backgroundColor: 'inherit',
       fontSize: 'inherit',
-      color: global.primaryBlue3,
+      color: globalStyles.primaryBlue3,
       cursor: 'pointer',
     },
 

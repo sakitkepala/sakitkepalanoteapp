@@ -1,7 +1,6 @@
-import { style, createVar } from '@vanilla-extract/css';
-import * as global from '../../app.css';
-
-const composerButtonSize = createVar();
+import { style } from '@vanilla-extract/css';
+import * as globalStyles from '@noteapp/global-styles';
+import { composerButtonSize } from './vars.css';
 
 export const container = style({
   display: 'flex',
@@ -24,10 +23,6 @@ export const editorScrollableArea = style({
   maxHeight: '400px',
 });
 
-export const cmContainer = style({
-  minHeight: composerButtonSize,
-});
-
 export const button = style({
   vars: {
     [composerButtonSize]: '2.125rem',
@@ -46,11 +41,15 @@ export const button = style({
   height: composerButtonSize,
   border: 'none',
   backgroundColor: 'transparent',
-  color: global.primaryBlue2,
+  color: globalStyles.primaryBlue2,
 
   transition: 'color 0.15s',
 
   ':hover': {
-    color: global.primaryBlue3,
+    color: globalStyles.primaryBlue3,
+  },
+
+  ':disabled': {
+    cursor: 'default',
   },
 });

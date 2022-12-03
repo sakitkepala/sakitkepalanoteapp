@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { request, gql } from 'graphql-request';
 
-import { NOTES_QUERY_KEY } from '../../notes/hooks/notes';
+import { NOTES_QUERY_KEY } from '../quick-notes-list/hooks/notes';
 
 const GRAPHQL_API_URL = 'http://localhost:6789/graphql';
 

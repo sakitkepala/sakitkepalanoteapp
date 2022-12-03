@@ -23,6 +23,7 @@ export const gridMiddle = style({
 
 export const stickyBottom = style({
   position: 'sticky',
+  zIndex: 1,
   bottom: 0,
   backgroundColor: globalStyles.primaryBlue,
 });

@@ -1,28 +1,29 @@
 import * as React from 'react';
-import { useNotes } from './hooks/notes';
-import { useWorkspace } from '../../contexts/workspace';
 
 import RenderMarkdown from 'react-markdown';
+import { useNotes, NoteItem } from './hooks/notes';
 
-import * as globalStyle from '../../app.css';
-import * as noteStyle from './note-list.css';
+import * as globalStyles from '@noteapp/global-styles';
+import * as styles from './note-list.css';
 
 import clsx from 'clsx';
 import { parseISO, format, isYesterday, isToday } from 'date-fns';
 import id from 'date-fns/locale/id';
 
-import type { NoteItem } from './hooks/notes';
+type NoteListProps = {
+  onSelectEditNote?: (id: number) => void;
+};
 
-function NoteList() {
-  const { data, isLoading, isSuccess } = useNotes();
-  const listByDate = useListByDate(data || []);
+function NoteList({ onSelectEditNote }: NoteListProps) {
+  const { data: notes, isLoading, isSuccess } = useNotes();
+  const listByDate = useListByDate(notes || []);
 
   React.useLayoutEffect(() => {
-    if (!data || !isSuccess) {
+    if (!notes || !isSuccess) {
       return;
     }
     window.scrollTo(0, document.body.scrollHeight);
-  }, [isSuccess, data]);
+  }, [isSuccess, notes]);
 
   if (isLoading) {
     return (
@@ -33,15 +34,27 @@ function NoteList() {
   }
 
   return (
-    <div className={noteStyle.noteList}>
+    <div className={styles.noteList}>
       {listByDate.map((group, index) => (
         <React.Fragment key={index}>
-          <div className={noteStyle.separatorBlock}>
-            <span className={noteStyle.bubble}>{group.day}</span>
+          <div className={styles.separatorBlock}>
+            <span className={styles.bubble}>{group.day}</span>
           </div>
 
           {group.noteItems.map((item: NoteItem) => (
-            <Note key={item.id} note={item} />
+            <div key={item.id} className={styles.itemWrapper}>
+              <Note note={item} />
+              <div className={styles.floatingMenuBase}>
+                <div className={styles.floatingMenuContainer}>
+                  <button
+                    className={styles.menuButton}
+                    onClick={() => onSelectEditNote?.(item.id)}
+                  >
+                    edit
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </React.Fragment>
       ))}
@@ -54,39 +67,18 @@ type NoteProps = {
 };
 
 function Note({ note }: NoteProps) {
-  const { editNoteId, setEdit, unsetEdit } = useWorkspace();
-
-  const handleClickEdit = () => {
-    if (editNoteId === note.id) {
-      unsetEdit();
-    } else {
-      setEdit(note.id);
-    }
-  };
-
   return (
-    <div className={noteStyle.itemWrapper}>
-      <div className={noteStyle.card}>
-        <MarkdownContent>{note.note}</MarkdownContent>
-
-        <div className={noteStyle.status}>
-          {note.isEdited && (
-            <React.Fragment>
-              <span>
-                <u>diedit</u>
-              </span>{' '}
-            </React.Fragment>
-          )}
-          <span>{note.createdAt}</span>
-        </div>
-      </div>
-
-      <div className={noteStyle.floatingMenuBase}>
-        <div className={noteStyle.floatingMenuContainer}>
-          <button className={noteStyle.menuButton} onClick={handleClickEdit}>
-            edit
-          </button>
-        </div>
+    <div className={styles.card}>
+      <MarkdownContent>{note.note}</MarkdownContent>
+      <div className={styles.status}>
+        {note.isEdited && (
+          <React.Fragment>
+            <span>
+              <u>diedit</u>
+            </span>{' '}
+          </React.Fragment>
+        )}
+        <span>{note.createdAt}</span>
       </div>
     </div>
   );
@@ -102,7 +94,7 @@ function MarkdownContent({ children }: MarkdownContentProps) {
   }
 
   return (
-    <div className={clsx(noteStyle.text, globalStyle.flow)}>
+    <div className={clsx(styles.text, globalStyles.flow)}>
       <RenderMarkdown>{children}</RenderMarkdown>
     </div>
   );
@@ -124,7 +116,7 @@ function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
 
     const groups: NoteGroup[] = [];
     const tmpGroup: {
-      [date: number]: {
+      [date: string]: {
         datetime: Date;
         notes: NoteItem[];
       };
@@ -132,9 +124,12 @@ function useListByDate(notes: NoteItem[] | null): NoteGroup[] {
 
     for (const noteItem of notes) {
       const datetime = parseISO(noteItem.createdAt);
-      const date = datetime.getDate();
+      const date = format(datetime, 'yyyy-MM-dd');
 
-      tmpGroup[date] = tmpGroup[date] || { datetime, notes: [] };
+      tmpGroup[date] = tmpGroup[date] || {
+        datetime,
+        notes: [],
+      };
       tmpGroup[date].notes.push({
         ...noteItem,
         createdAt: format(datetime, 'H:m', { locale: id }),

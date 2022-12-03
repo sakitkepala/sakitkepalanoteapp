@@ -1,39 +1,18 @@
-import { WorkspaceProvider } from './contexts/workspace';
-import { SideBarLeft, SideBarRight } from './components/sidebar';
-import { NoteList } from './components/notes';
-import { NoteComposer } from './components/note-composer';
+import * as React from 'react';
 
-import './app.css';
-import * as component from './components.css';
+import '@noteapp/global-styles';
 
-import { clsx } from 'clsx';
+const ScreenQuickNotes = React.lazy(
+  () => import('@noteapp/screens/quick-notes')
+);
 
 export function App() {
   return (
     <>
-      <header></header>
-
-      <div className={component.shell}>
-        <WorkspaceProvider>
-          <div className={component.gridContainer}>
-            <SideBarLeft />
-
-            <div>
-              <NoteList />
-            </div>
-
-            <SideBarRight />
-          </div>
-
-          <div
-            className={clsx(component.stickyBottom, component.gridContainer)}
-          >
-            <div className={component.gridMiddle}>
-              <NoteComposer />
-            </div>
-          </div>
-        </WorkspaceProvider>
-      </div>
+      <header />
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <ScreenQuickNotes />
+      </React.Suspense>
     </>
   );
 }
