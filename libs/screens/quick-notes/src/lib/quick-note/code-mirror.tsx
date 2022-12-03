@@ -3,9 +3,15 @@ import * as React from 'react';
 import { EditorState, Compartment } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
+import {
+  syntaxHighlighting,
+  defaultHighlightStyle,
+} from '@codemirror/language';
 import { markdown } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 
+import * as globalStyles from '@noteapp/global-styles';
 import * as styles from './code-mirror.css';
 
 type CodeMirrorProps = {
@@ -32,9 +38,14 @@ function CodeMirror({
     }
 
     const extensions = [
+      EditorView.theme({
+        '.cm-content': { fontFamily: globalStyles.fontFamily },
+      }),
       history(),
-      keymap.of([...defaultKeymap, ...historyKeymap]),
+      closeBrackets(),
+      keymap.of([...defaultKeymap, ...historyKeymap, ...closeBracketsKeymap]),
       EditorView.lineWrapping,
+      syntaxHighlighting(defaultHighlightStyle),
       markdown({ codeLanguages: languages }),
       disablingOptions.of([
         EditorState.readOnly.of(true),
