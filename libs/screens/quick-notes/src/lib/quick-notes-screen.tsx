@@ -49,11 +49,7 @@ export function ScreenQuickNotes() {
     <div className={styles.shell}>
       <div className={styles.gridContainer}>
         <div className={styles.gridMiddle}>
-          <QuickNotesList
-            onSelectEditNote={(id) => {
-              setEditNoteId((noteId) => (noteId !== id ? id : null));
-            }}
-          />
+          <QuickNotesList onSelectEditNote={setEditNoteId} />
         </div>
       </div>
       <div className={clsx(styles.stickyBottom, styles.gridContainer)}>
@@ -61,6 +57,7 @@ export function ScreenQuickNotes() {
           <QuickNoteComposer
             key={getComposerSessionKey(noteForEdit?.id)}
             note={noteForEdit}
+            onCloseEdit={() => setEditNoteId(null)}
             onSubmit={handleSubmitNote}
           />
         </div>

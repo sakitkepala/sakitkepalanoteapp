@@ -3,14 +3,46 @@ import * as globalStyles from '@noteapp/global-styles';
 import { composerButtonSize } from './vars.css';
 
 export const container = style({
-  display: 'flex',
-  alignItems: 'flex-end',
-
   margin: '0.75rem auto 2rem',
   padding: '0.5rem',
   borderRadius: '1rem',
   backgroundColor: '#ffffff',
   boxShadow: '0 4px 4px 0 rgb(0, 0, 0, 0.015)',
+});
+
+export const editRow = style({
+  marginBottom: '0.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  maxHeight: composerButtonSize,
+});
+
+export const editDisplay = style({
+  cursor: 'pointer',
+  overflowX: 'hidden',
+  flex: '1 1 auto',
+  paddingInline: '0.125rem',
+});
+
+export const editLabel = style({
+  marginBottom: '0.375rem',
+  color: globalStyles.primaryBlue3,
+  fontSize: '0.8em',
+  fontWeight: 600,
+});
+
+export const editSnippet = style({
+  overflowX: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  fontSize: '0.8em',
+  fontWeight: 'normal',
+  color: globalStyles.primaryBlue2,
+});
+
+export const editorRow = style({
+  display: 'flex',
+  alignItems: 'flex-end',
 });
 
 export const editorScrollableArea = style({
@@ -51,5 +83,11 @@ export const button = style({
 
   ':disabled': {
     cursor: 'default',
+  },
+
+  selectors: {
+    ['&:disabled:hover']: {
+      color: globalStyles.primaryBlue2,
+    },
   },
 });

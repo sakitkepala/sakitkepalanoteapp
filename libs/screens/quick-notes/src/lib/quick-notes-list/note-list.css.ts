@@ -23,6 +23,7 @@ export const bubble = style({
   padding: '0.5rem 1rem',
   borderRadius: '1rem',
   backgroundColor: 'rgb(255, 255, 255, 0.5)',
+  fontSize: '0.875rem',
 });
 
 export const itemWrapper = style({

@@ -37,8 +37,6 @@ globalStyle('body', {
   backgroundColor: primaryBlue,
   color: 'rgb(55, 65, 81)',
   fontFamily: fontFamily,
-  fontSize: '0.875rem',
-  fontWeight: 400,
 });
 
 globalStyle('code', {
