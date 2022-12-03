@@ -15,10 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@protosavedui/database": ["libs/database/src/index.ts"],
-      "@protosavedui/graphql": ["libs/graphql/src/index.ts"],
-      "@protosavedui/types": ["libs/types/src/index.ts"],
-      "@protosavedui/utils": ["libs/utils/src/index.ts"]
+      "@noteapp/database": ["libs/database/src/index.ts"],
+      "@noteapp/global-styles": ["libs/global-styles/src/index.ts"],
+      "@noteapp/graphql": ["libs/graphql/src/index.ts"],
+      "@noteapp/screens/quick-notes": ["libs/screens/quick-notes/src/index.ts"],
+      "@noteapp/types": ["libs/types/src/index.ts"],
+      "@noteapp/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

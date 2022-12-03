@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { FastifyServerContext } from '@protosavedui/types';
+import { FastifyServerContext } from '@noteapp/types';
 
 const prisma = new PrismaClient();
 

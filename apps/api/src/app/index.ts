@@ -1,9 +1,9 @@
 import createFastifyServer, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { createYoga } from 'graphql-yoga';
-import { createSchema, createContext, AppContext } from '@protosavedui/graphql';
+import { createSchema, createContext, AppContext } from '@noteapp/graphql';
 
-import type { FastifyServerContext } from '@protosavedui/types';
+import type { FastifyServerContext } from '@noteapp/types';
 
 function buildServer(logging = true) {
   const server: FastifyInstance = createFastifyServer({
