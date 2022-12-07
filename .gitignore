@@ -101,4 +101,4 @@ buck-out/
 **/vendor/bundle/
 
 
-apps/mobile-e2e/artifacts
+apps/notemobile-e2e/artifacts
