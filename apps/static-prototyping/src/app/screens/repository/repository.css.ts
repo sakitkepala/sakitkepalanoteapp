@@ -1,4 +1,4 @@
-import { style, createVar } from '@vanilla-extract/css';
+import { style, createVar, globalStyle, keyframes } from '@vanilla-extract/css';
 import * as globalStyles from '../../global-styles.css';
 
 const threadCardItemGap = createVar();
@@ -14,6 +14,14 @@ export const fullHeightContainer = style({
   display: 'flex',
 });
 
+export const repoDrawerItem = style({
+  padding: '1px 4px 0 4px',
+  ':hover': {
+    borderRadius: 4,
+    backgroundColor: globalStyles.primaryBlue1,
+  },
+});
+
 export const welcomeContainer = style({
   flex: '1 0 0',
   display: 'flex',
@@ -24,7 +32,7 @@ export const welcomeContainer = style({
 export const welcomeContent = style({
   width: '25rem',
   paddingTop: '3rem',
-  paddingBottom: '10rem',
+  // paddingBottom: '10rem',
   display: 'flex',
   flexDirection: 'column',
   gap: '2rem',
@@ -69,6 +77,17 @@ export const quickActionButton = style({
   ':hover': {
     color: globalStyles.primaryBlue3,
   },
+
+  selectors: {
+    '&:disabled:hover': {
+      cursor: 'default',
+      color: globalStyles.primaryBlue2,
+    },
+  },
+});
+
+export const quickActionButtonFull = style({
+  width: '100%',
 });
 
 export const quickActionButtonLabel = style({
@@ -76,7 +95,16 @@ export const quickActionButtonLabel = style({
     [`${quickActionButton}:hover &`]: {
       textDecoration: 'underline',
     },
+    [`${quickActionButton}:disabled:hover &`]: {
+      textDecoration: 'none',
+    },
   },
+});
+
+export const quickActionButtonLabelTrunc = style({
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
 });
 
 export const threadViewContainer = style({
@@ -91,14 +119,22 @@ export const tabBar = style({
 });
 
 export const tabButtonsRail = style({
-  flex: '1 0 0',
+  flexShrink: 1,
+  overflow: 'hidden',
+});
+
+export const tabButtonsList = style({
   display: 'flex',
   gap: 1,
-  alignItems: 'flex-end',
 });
 
 export const tabActions = style({
-  flexShrink: 1,
+  flexGrow: 1,
+  flexShrink: 0,
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '0.5rem',
+  alignItems: 'center',
 });
 
 export const tabButtonBase = style({
@@ -145,6 +181,7 @@ export const tab = style({
   alignItems: 'center',
   backgroundColor: globalStyles.primaryBlue,
   ':hover': {
+    borderRadius: 2,
     backgroundColor: globalStyles.primaryBlue1,
   },
 });
@@ -158,7 +195,10 @@ export const tabActive = style({
 });
 
 export const tabLabelButton = style({
-  // TODO: maxWidth: '...rem',
+  maxWidth: '13rem',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
   padding: '0.5rem 0.125rem 0.5rem 0.75rem',
   color: globalStyles.primaryBlue2,
   transition: 'color 0.15s',
@@ -207,9 +247,26 @@ export const tabCloseButton = style({
 export const threadHeader = style({
   minHeight: 'calc(1.5rem + 1rem)',
   padding: '0.5rem',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const savingSpinner = style({
+  display: 'inline-block',
+  marginRight: 2,
+});
+
+const spinning = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+});
+
+globalStyle(`${savingSpinner} > svg`, {
+  animation: `${spinning} 0.625s infinite linear`,
 });
 
 export const threadNameHeading = style({
+  flexGrow: 1,
   color: globalStyles.primaryBlue3,
   display: 'flex',
   alignItems: 'center',
@@ -217,8 +274,9 @@ export const threadNameHeading = style({
 });
 
 export const threadNameLabel = style({
+  userSelect: 'text',
   color: globalStyles.primaryBlue3,
-  fontSize: '1.25rem',
+  fontSize: '1.125rem',
 });
 
 export const viewerPanelContainer = style({
@@ -270,6 +328,7 @@ export const noteThread = style({
 });
 
 export const noteCard = style({
+  userSelect: 'text',
   minHeight: '12.5rem',
   padding: '1.75rem 1.5rem',
   borderRadius: '0.5rem',
@@ -282,9 +341,13 @@ export const noteCard = style({
   },
 });
 
+globalStyle(`${noteCard} *`, {
+  userSelect: 'auto',
+});
+
 export const par = style({
   selectors: {
-    [`${noteCard} > p.& + p.&`]: {
+    [`${noteCard} > p& + p&`]: {
       marginTop: contentParagraphGap,
     },
   },

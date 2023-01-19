@@ -31,6 +31,7 @@ globalStyle('*, *::before, *::after', {
   boxSizing: 'inherit',
   margin: 0,
   padding: 0,
+  userSelect: 'none',
 });
 
 globalStyle('body', {
