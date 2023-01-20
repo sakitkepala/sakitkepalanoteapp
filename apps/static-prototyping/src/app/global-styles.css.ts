@@ -34,6 +34,10 @@ globalStyle('*, *::before, *::after', {
   userSelect: 'none',
 });
 
+globalStyle('html, body', {
+  height: '100%',
+});
+
 globalStyle('body', {
   overflowX: 'hidden',
   backgroundColor: primaryBlue,

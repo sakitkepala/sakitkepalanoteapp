@@ -19,11 +19,11 @@ function AppHeaderBar() {
           <Link
             className={clsx(
               styles.navMenuLink,
-              pathname === '/stream' ? styles.navMenuLinkActive : undefined
+              pathname === '/captures' ? styles.navMenuLinkActive : undefined
             )}
-            to="/stream"
+            to="/captures"
           >
-            Strim
+            Tangkapan
           </Link>
           <Link
             className={clsx(

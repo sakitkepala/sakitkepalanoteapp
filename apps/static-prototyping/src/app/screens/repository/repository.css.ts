@@ -331,7 +331,7 @@ export const noteCard = style({
   userSelect: 'text',
   minHeight: '12.5rem',
   padding: '1.75rem 1.5rem',
-  borderRadius: '0.5rem',
+  borderRadius: 6,
   backgroundColor: '#ffffff',
 
   selectors: {
