@@ -11,9 +11,49 @@ globalStyle(`#root > ${screenContainer}`, {
   flex: '1 0 0', // <- ini yang bikin berhasil `overflow: hidden`, flex-basis diset ke `0`
 });
 
+export const searchPanel = style({
+  width: 240,
+  padding: '1rem 0.5rem',
+});
+
+export const searchBox = style({
+  display: 'block',
+  width: '100%',
+  padding: '0.5rem 0.75rem',
+  border: 'none',
+  borderRadius: '0.5rem',
+  backgroundColor: globalStyles.primaryBlue1,
+  color: 'inherit',
+  fontFamily: 'inherit',
+  '::placeholder': {
+    color: globalStyles.primaryBlue2,
+  },
+});
+
 export const capturesListContainer = style({
+  paddingBlock: 4,
   display: 'flex',
   flexDirection: 'column',
+});
+
+export const capturesListWelcomeScreen = style({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+export const capturesListWelcomeScreenContent = style({
+  width: 300,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  gap: '1rem',
+  alignItems: 'center',
+  color: globalStyles.primaryBlue2,
+  fontSize: 14,
+  textAlign: 'center',
 });
 
 export const captureInputBar = style({
@@ -23,10 +63,44 @@ export const captureInputBar = style({
 });
 
 export const captureInputContainer = style({
-  padding: '1.5rem',
   borderRadius: '0.5rem',
   backgroundColor: globalStyles.primaryBlue1,
+  display: 'flex',
+});
+
+globalStyle(`${captureInputContainer} > *:nth-child(1)`, {
+  flexGrow: 1,
+  padding: '1.5rem',
   userSelect: 'text',
+  verticalAlign: 'middle',
+});
+
+globalStyle(`${captureInputContainer} > *:nth-child(2)`, {
+  flexShrink: 0,
+  alignSelf: 'flex-end',
+  padding: '1rem',
+  display: 'flex',
+  alignItems: 'flex-start',
+});
+
+export const captureDemoAdd = style({
+  border: 'none',
+  padding: '0.5rem',
+  width: '2.25rem',
+  height: '2.25rem',
+  borderRadius: '50%',
+  backgroundColor: 'transparent',
+  cursor: 'pointer',
+
+  ':hover': {
+    backgroundColor: globalStyles.primaryBlue2,
+  },
+
+  selectors: {
+    '&:disabled:hover': {
+      backgroundColor: globalStyles.primaryBlue,
+    },
+  },
 });
 
 export const capturesListRoot = style({
@@ -110,7 +184,8 @@ export const par = style({
   },
 });
 
-export const reply = style({
+export const quoteReply = style({
+  marginBottom: '0.625rem',
   padding: '2px 10px',
   borderLeft: 'solid 5px ' + globalStyles.primaryBlue,
   color: globalStyles.primaryBlue2,
@@ -136,6 +211,6 @@ export const inventoryBar = style({
 });
 
 export const inventorySectionHeading = style({
-  fontSize: '1.125rem',
+  fontSize: '1rem',
   color: globalStyles.primaryBlue2,
 });
