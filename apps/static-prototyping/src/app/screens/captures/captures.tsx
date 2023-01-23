@@ -6,13 +6,14 @@ import { TbPin, TbCapture } from 'react-icons/tb';
 import { GrLaunch } from 'react-icons/gr';
 import { GoChevronRight } from 'react-icons/go';
 
-import * as globalStyles from '../../global-styles.css';
+import { clsx } from 'clsx';
+
 import * as styles from './captures.css';
 
 function ScreenCaptures() {
   return (
     <div className={styles.screenContainer}>
-      <div className={styles.searchPanel}>
+      <div className={clsx(styles.sidebar, styles.searchPanel)}>
         <input
           type="text"
           className={styles.searchBox}
@@ -20,7 +21,7 @@ function ScreenCaptures() {
         />
       </div>
       <CapturesList />
-      {false && <InventoryBar />}
+      <InventoryBar />
     </div>
   );
 }
@@ -88,13 +89,17 @@ function CapturesList() {
   const [captureItems, setCaptureItems] = React.useState<typeof fakeItems>([]);
   const isFinishDemo = captureItems.length >= fakeItems.length;
 
+  const visibleVaptureItems = captureItems.filter(
+    (it) => it.type !== 'permanent'
+  );
+
   const lastItemDivRef = React.useRef<HTMLDivElement>(null);
   const fakeReplyLongBubbleDivRef = React.useRef<HTMLDivElement>(null);
   const fakeReplyDivRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     lastItemDivRef.current?.scrollIntoView?.();
-  }, [captureItems.length]);
+  }, [visibleVaptureItems.length]);
 
   const addItem = () => {
     if (isFinishDemo) {
@@ -108,8 +113,8 @@ function CapturesList() {
   };
 
   return (
-    <div className={styles.capturesListContainer}>
-      {!captureItems.length ? (
+    <div className={styles.capturesListPanel}>
+      {!visibleVaptureItems.length ? (
         <div className={styles.capturesListRoot}>
           <div className={styles.capturesListWelcomeScreen}>
             <div className={styles.capturesListWelcomeScreenContent}>
@@ -123,14 +128,14 @@ function CapturesList() {
         </div>
       ) : (
         <ScrollableCapturesList>
-          {captureItems.map((captureItem, index) => {
+          {visibleVaptureItems.map((captureItem, index) => {
             const ref: { [index: number]: React.RefObject<HTMLDivElement> } = {
               3: fakeReplyDivRef,
               9: fakeReplyLongBubbleDivRef,
             };
 
             const getDivRef = (index: number) => {
-              return index === captureItems.length - 1
+              return index === visibleVaptureItems.length - 1
                 ? lastItemDivRef
                 : ref[index];
             };
@@ -165,7 +170,7 @@ function CapturesList() {
         </ScrollableCapturesList>
       )}
 
-      <div className={styles.captureInputBar}>
+      <div className={styles.captureInputPanel}>
         <div className={styles.captureInputContainer}>
           <div>Fake editor</div>
           <div>
@@ -319,12 +324,17 @@ function CardFakePermanentNote({ children }: React.PropsWithChildren) {
 
 function InventoryBar() {
   return (
-    <div className={styles.inventoryBarColumn}>
-      <div className={styles.inventoryBar}>
-        <h2 className={styles.inventorySectionHeading}>
-          <TbPin size="20" style={{ transform: 'translateY(4px)' }} /> Dipin
-        </h2>
-      </div>
+    <div className={clsx(styles.sidebar, styles.inventoryPanel)}>
+      {false && (
+        <div className={styles.pinBoard}>
+          <h2 className={styles.pinBoardSectionHeading}>
+            <TbPin size="20" style={{ transform: 'translateY(4px)' }} /> Dipin
+          </h2>
+        </div>
+      )}
+
+      {false && <h3>Media</h3>}
+      {false && <div>konten</div>}
     </div>
   );
 }

@@ -16,6 +16,11 @@ export const navBar = style({
   padding: '0.4rem',
 });
 
+export const branding = style({
+  color: globalStyles.primaryBlue2,
+  ':hover': { color: globalStyles.primaryRed },
+});
+
 export const navMenus = style({
   display: 'flex',
   gap: '0.5rem',
@@ -23,13 +28,13 @@ export const navMenus = style({
 
 export const navMenuLink = style({
   padding: '0.25rem 0.625rem',
-  borderRadius: 4,
+  borderRadius: 2,
   fontSize: 14,
   textDecoration: 'none',
-  color: globalStyles.primaryBlue3,
+  color: globalStyles.primaryBlue2,
   fontWeight: 600,
   ':hover': {
-    backgroundColor: globalStyles.primaryBlue1,
+    color: globalStyles.primaryBlue3,
   },
 });
 
@@ -37,6 +42,7 @@ export const navMenuLinkActive = style({
   selectors: {
     [`${navMenuLink}&`]: {
       backgroundColor: globalStyles.primaryBlue1,
+      color: globalStyles.primaryBlue3,
     },
   },
 });

@@ -12,12 +12,13 @@ export const fullHeightContainer = style({
   },
 
   display: 'flex',
+  justifyContent: 'center',
 });
 
 export const repoDrawerItem = style({
   padding: '1px 4px 0 4px',
   ':hover': {
-    borderRadius: 4,
+    borderRadius: 2,
     backgroundColor: globalStyles.primaryBlue1,
   },
 });
@@ -27,15 +28,17 @@ export const welcomeContainer = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  maxWidth: '43.75rem',
+  height: '100%',
+  overflow: 'hidden',
 });
 
 export const welcomeContent = style({
   width: '25rem',
   paddingTop: '3rem',
-  // paddingBottom: '10rem',
   display: 'flex',
   flexDirection: 'column',
-  gap: '2rem',
+  gap: '1.5rem',
 });
 
 export const welcomeMainIcon = style({
@@ -46,7 +49,7 @@ export const welcomeMainIcon = style({
 export const welcomeActionsGrid = style({
   display: 'grid',
   gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-  gap: '0.5rem',
+  gap: '1rem',
 });
 
 export const quickActionSectionLabel = style({
@@ -54,6 +57,55 @@ export const quickActionSectionLabel = style({
   fontSize: '1rem',
   color: globalStyles.primaryBlue2,
   marginBottom: '0.5rem',
+});
+
+export const quickActionPreviewNoteCardList = style({});
+
+globalStyle(`${quickActionPreviewNoteCardList} > * + *`, {
+  marginTop: 5,
+});
+
+export const quickActionBaseCardButton = style({
+  border: 'none',
+  fontFamily: 'inherit',
+  cursor: 'pointer',
+  width: '100%',
+  padding: '0.5rem',
+  borderRadius: 6,
+  fontSize: 14,
+});
+
+export const quickActionAddNoteCard = style({
+  border: 'solid 1px ' + globalStyles.primaryBlue1,
+  backgroundColor: globalStyles.primaryBlue,
+
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  color: globalStyles.primaryBlue2,
+
+  ':hover': {
+    backgroundColor: globalStyles.primaryBlue1,
+  },
+});
+
+export const quickActionPreviewNoteCard = style({
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: '#ffffff',
+  color: globalStyles.primaryBlue2,
+});
+
+export const latestNotePreviewText = style({
+  color: 'rgb(55, 65, 81)',
+});
+
+export const shortcutsButtons = style({
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '1rem',
 });
 
 export const quickActionList = style({
@@ -111,11 +163,13 @@ export const threadViewContainer = style({
   flex: '1 0 0',
   display: 'flex',
   flexDirection: 'column',
+  maxWidth: '43.75rem',
 });
 
 export const tabBar = style({
   padding: 3,
   display: 'flex',
+  gap: '0.5rem',
 });
 
 export const tabButtonsRail = style({
@@ -135,6 +189,7 @@ export const tabActions = style({
   justifyContent: 'space-between',
   gap: '0.5rem',
   alignItems: 'center',
+  minHeight: 34,
 });
 
 export const tabButtonBase = style({
@@ -142,6 +197,7 @@ export const tabButtonBase = style({
   padding: 0,
   margin: 0,
   background: 'none',
+  fontSize: 14,
   fontFamily: 'inherit',
   cursor: 'pointer',
   userSelect: 'none',
@@ -149,7 +205,6 @@ export const tabButtonBase = style({
 
 export const tabAddButton = style({
   alignSelf: 'center',
-  marginLeft: '0.5rem',
 
   display: 'flex',
   justifyContent: 'center',
@@ -317,12 +372,12 @@ export const viewerPanelScrollable = style({
 
 export const noteThread = style({
   vars: {
-    [threadCardItemGap]: '3rem',
+    [threadCardItemGap]: '0.75rem',
     [contentParagraphGap]: '1rem',
   },
 
   paddingTop: '3rem',
-  paddingBottom: '10rem',
+  // paddingBottom: '10rem',
   maxWidth: '33.25rem',
   marginInline: 'auto',
 });
@@ -351,4 +406,19 @@ export const par = style({
       marginTop: contentParagraphGap,
     },
   },
+});
+
+export const threadBottomActionsContainer = style({
+  marginTop: '5rem',
+  marginBottom: '10rem',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+export const threadBottomActionsContent = style({
+  width: '25rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1.5rem',
 });

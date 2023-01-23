@@ -11,8 +11,13 @@ globalStyle(`#root > ${screenContainer}`, {
   flex: '1 0 0', // <- ini yang bikin berhasil `overflow: hidden`, flex-basis diset ke `0`
 });
 
+export const sidebar = style({
+  overflow: 'hidden',
+  flexShrink: 1,
+  minWidth: '20rem',
+});
+
 export const searchPanel = style({
-  width: 240,
   padding: '1rem 0.5rem',
 });
 
@@ -30,10 +35,13 @@ export const searchBox = style({
   },
 });
 
-export const capturesListContainer = style({
+export const capturesListPanel = style({
+  flexGrow: 1,
   paddingBlock: 4,
   display: 'flex',
   flexDirection: 'column',
+  minWidth: '20rem',
+  maxWidth: '43.75rem',
 });
 
 export const capturesListWelcomeScreen = style({
@@ -45,7 +53,7 @@ export const capturesListWelcomeScreen = style({
 });
 
 export const capturesListWelcomeScreenContent = style({
-  width: 300,
+  maxWidth: '18.75rem',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -56,7 +64,7 @@ export const capturesListWelcomeScreenContent = style({
   textAlign: 'center',
 });
 
-export const captureInputBar = style({
+export const captureInputPanel = style({
   flexShrink: 0,
   padding: '1rem 0.5rem',
   backgroundColor: globalStyles.primaryBlue,
@@ -106,7 +114,8 @@ export const captureDemoAdd = style({
 export const capturesListRoot = style({
   overflow: 'hidden',
   height: '100%',
-  width: 700,
+  width: '100%',
+  minWidth: '20rem',
 });
 
 export const capturesListViewport = style({
@@ -197,20 +206,17 @@ export const quoteReply = style({
   userSelect: 'none',
 });
 
-export const inventoryBarColumn = style({
+export const inventoryPanel = style({
   padding: '0.5rem',
-  width: 360,
 });
 
-export const inventoryBar = style({
-  width: '100%',
-  maxHeight: '100%',
+export const pinBoard = style({
   padding: '1.25rem',
   borderRadius: '0.5rem',
   backgroundColor: '#ffffff',
 });
 
-export const inventorySectionHeading = style({
+export const pinBoardSectionHeading = style({
   fontSize: '1rem',
   color: globalStyles.primaryBlue2,
 });

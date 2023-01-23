@@ -12,7 +12,7 @@ function AppHeaderBar() {
   return (
     <header className={styles.header}>
       <div className={styles.navBar}>
-        <div title="Hai! :)" style={{ color: globalStyles.primaryBlue3 }}>
+        <div className={styles.branding} title="Hai! :)">
           <HiOutlineRectangleGroup size="18" />
         </div>
         <nav className={styles.navMenus}>

@@ -56,7 +56,7 @@ function ScreenRepository() {
 
   return (
     <div className={styles.fullHeightContainer}>
-      <div style={{ width: 280 }}>
+      <div style={{ width: '20rem' }}>
         <ul style={{ padding: '1rem', paddingBottom: 0, listStyle: 'none' }}>
           <li>
             <h2 className={styles.quickActionSectionLabel}>Utas</h2>
@@ -161,7 +161,7 @@ function ScreenRepository() {
         </ul>
       </div>
       <ThreadWorkspace setPanels={setPanels} visiblePanels={visiblePanels} />
-      <div style={{ width: 280, color: globalStyles.primaryBlue }}>
+      <div style={{ width: '20rem', color: globalStyles.primaryBlue }}>
         side bar
       </div>
     </div>
@@ -184,8 +184,20 @@ function ThreadWelcomeScreen({
     <div className={styles.welcomeContainer}>
       <div className={styles.welcomeContent}>
         <div className={styles.welcomeMainIcon}>
-          <HiOutlineInboxStack size="120" />
+          <HiOutlineInboxStack size="72" />
         </div>
+
+        <ul className={clsx(styles.quickActionList, styles.shortcutsButtons)}>
+          <li>
+            <QuickActionButton
+              icon={<RxCardStackPlus size="18" />}
+              onClick={() => alert('TODO: Modal tulis Catatan baru')}
+              title="Fitur segera rilis"
+            >
+              Tulis Catatan
+            </QuickActionButton>
+          </li>
+        </ul>
 
         <form
           onSubmit={(ev) => {
@@ -193,98 +205,20 @@ function ThreadWelcomeScreen({
             onOpenNewPanel();
           }}
         >
-          <h2
-            className={styles.threadNameLabel}
-            style={{
-              color: globalStyles.primaryBlue2,
-              fontSize: '1.25rem',
-              marginBottom: '0.5rem',
-              textAlign: 'center',
-            }}
-          >
-            Selamat datang!
-          </h2>
           <input
             type="text"
             className={styles.noteSearchBox}
-            placeholder="Temukan Catatan atau Utas dari repositori..."
+            placeholder="Temukan dalam repositori..."
           />
         </form>
 
         <div className={styles.welcomeActionsGrid}>
           <div>
-            <ul className={styles.quickActionList}>
-              <li>
-                <QuickActionButton
-                  icon={<HiOutlineInboxStack size="18" />}
-                  onClick={() => alert('TODO: Buka sidebar list notes')}
-                >
-                  Telusuri semua Catatan
-                </QuickActionButton>
-              </li>
-
-              <li>
-                <QuickActionButton
-                  icon={<RxCardStackPlus size="18" />}
-                  onClick={() => alert('TODO: Modal tulis Catatan baru')}
-                  disabled
-                  title="Fitur segera rilis"
-                >
-                  Tulis Catatan baru
-                </QuickActionButton>
-              </li>
-            </ul>
+            <LatestNotes setPanels={setPanels} />
           </div>
 
           <div>
-            <h2 className={styles.quickActionSectionLabel}>Catatan terbaru</h2>
-            <ul className={styles.quickActionList}>
-              {[
-                { name: 'fokajs99' },
-                { name: 'fokajs98' },
-                {
-                  name: 'f1b',
-                  preview: 'Pura-puranya ini note dengan nomer ID f1b. ...',
-                },
-              ].map((n) => (
-                <li key={n.name}>
-                  <QuickActionButton
-                    icon={<BsCardText size="18" />}
-                    full
-                    truncLabel
-                    title={n.preview || n.name}
-                    onClick={
-                      n.name !== 'f1b'
-                        ? undefined
-                        : () => {
-                            setPanels((panels) => {
-                              if (panels.length === 0) {
-                                return fakePanelsData.map((p) => ({
-                                  ...p,
-                                  visible: p.id === 4,
-                                }));
-                              } else {
-                                return panels.map((p) => ({
-                                  ...p,
-                                  visible: p.id === 4 || p.visible,
-                                }));
-                              }
-                            });
-                          }
-                    }
-                  >
-                    {n.preview || n.name}
-                  </QuickActionButton>
-                </li>
-              ))}
-            </ul>
-
-            <h2
-              className={styles.quickActionSectionLabel}
-              style={{ marginTop: '1rem' }}
-            >
-              Utas terakhir
-            </h2>
+            <h2 className={styles.quickActionSectionLabel}>Utas barusan</h2>
             <ul className={styles.quickActionList}>
               {[fakePanelsData[1], fakePanelsData[2]].map((p) => (
                 <li key={p.id}>
@@ -299,17 +233,83 @@ function ThreadWelcomeScreen({
               ))}
             </ul>
 
-            <div style={{ marginTop: '0.625rem' }}>
+            <div style={{ marginTop: '0.75rem' }}>
               <QuickActionButton
                 onClick={() => alert('TODO: Buka sidebar list threads')}
               >
-                Lihat semua Utas
+                Telusuri semua Utas
               </QuickActionButton>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function LatestNotes({
+  setPanels,
+}: {
+  setPanels: React.Dispatch<React.SetStateAction<Panel[]>>;
+}) {
+  return (
+    <React.Fragment>
+      <h2 className={styles.quickActionSectionLabel}>Catatan terbaru</h2>
+      <div className={styles.quickActionPreviewNoteCardList}>
+        {[
+          { name: 'fokajs99' },
+          { name: 'fokajs98' },
+          {
+            name: 'f1b',
+            preview: 'Note nomer ID f1b. ...',
+          },
+        ].map((n) => (
+          <button
+            key={n.name}
+            className={clsx(
+              styles.quickActionBaseCardButton,
+              styles.quickActionPreviewNoteCard
+            )}
+            onClick={
+              n.name !== 'f1b'
+                ? undefined
+                : () => {
+                    setPanels((panels) => {
+                      if (panels.length === 0) {
+                        return fakePanelsData.map((p) => ({
+                          ...p,
+                          visible: p.id === 4,
+                        }));
+                      } else {
+                        return panels.map((p) => ({
+                          ...p,
+                          visible: p.id === 4 || p.visible,
+                        }));
+                      }
+                    });
+                  }
+            }
+          >
+            <span>
+              <BsCardText size="18" /> {n.name}
+            </span>
+            <span className={styles.latestNotePreviewText}>
+              {n.preview || (
+                <React.Fragment>Ini teks fake aja wkwk...</React.Fragment>
+              )}
+            </span>
+          </button>
+        ))}
+
+        <div style={{ marginTop: '0.75rem' }}>
+          <QuickActionButton
+            onClick={() => alert('TODO: Buka sidebar list notes')}
+          >
+            Telusuri semua Catatan
+          </QuickActionButton>
+        </div>
+      </div>
+    </React.Fragment>
   );
 }
 
@@ -606,6 +606,33 @@ function ThreadPanelScrollableContainer({ children }: React.PropsWithChildren) {
   );
 }
 
+function ThreadBottomActions() {
+  return (
+    <div className={styles.threadBottomActionsContainer}>
+      <div className={styles.threadBottomActionsContent}>
+        <ul className={clsx(styles.quickActionList, styles.shortcutsButtons)}>
+          <li>
+            <QuickActionButton
+              icon={<RxCardStackPlus size="18" />}
+              title="Fitur segera rilis"
+            >
+              Tulis Catatan
+            </QuickActionButton>
+          </li>
+        </ul>
+
+        <form onSubmit={(ev) => ev.preventDefault()}>
+          <input
+            type="text"
+            className={styles.noteSearchBox}
+            placeholder="Ambil Catatan dari repositori..."
+          />
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function ThreadPanelWithFakeSingleContent() {
   const [fakeLoading, setFakeLoading] = React.useState<boolean>(true);
 
@@ -637,6 +664,7 @@ function ThreadPanelWithFakeSingleContent() {
           </Par>
         </div>
       </div>
+      <ThreadBottomActions />
     </ThreadPanelScrollableContainer>
   );
 }
@@ -683,6 +711,7 @@ function ThreadPanelWithFakeOrderedContent() {
           </Par>
         </div>
       </div>
+      <ThreadBottomActions />
     </ThreadPanelScrollableContainer>
   );
 }
@@ -725,6 +754,8 @@ function ThreadPanelWithFakeContent() {
           <Par>Card note lagi. Tapi beda konten.</Par>
         </div>
       </div>
+
+      <ThreadBottomActions />
     </ThreadPanelScrollableContainer>
   );
 }
@@ -861,6 +892,8 @@ function ThreadPanelWithFakeLongContent() {
           <Par>Card note lagi. Tapi beda konten.</Par>
         </div>
       </div>
+
+      <ThreadBottomActions />
     </ThreadPanelScrollableContainer>
   );
 }
