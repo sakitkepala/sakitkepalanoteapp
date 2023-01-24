@@ -5,7 +5,11 @@ import { MdUnfoldMore } from 'react-icons/md';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoCloseSharp, IoAddSharp } from 'react-icons/io5';
 import { RxCardStackPlus } from 'react-icons/rx';
-import { HiOutlineInboxStack, HiOutlineRectangleStack } from 'react-icons/hi2';
+import {
+  HiOutlineInboxStack,
+  HiOutlineRectangleStack,
+  HiOutlineQueueList,
+} from 'react-icons/hi2';
 import { clsx } from 'clsx';
 import * as styles from './repository.css';
 import * as globalStyles from '../../global-styles.css';
@@ -55,53 +59,74 @@ function ScreenRepository() {
   };
 
   return (
-    <div className={styles.fullHeightContainer}>
+    <div className={styles.screenRepositoryContainer}>
       <div style={{ width: '20rem' }}>
-        <ul style={{ padding: '1rem', paddingBottom: 0, listStyle: 'none' }}>
-          <li>
-            <h2 className={styles.quickActionSectionLabel}>Utas</h2>
-          </li>
-          {[fakePanelsData[1], fakePanelsData[2]].map((p) => (
-            <li key={p.id} className={styles.repoDrawerItem}>
-              <QuickActionButton
-                icon={<HiOutlineRectangleStack size="18" />}
-                full
-                truncLabel
-                onClick={() => onOpenThreadPanel(p.id)}
-                title={p.threadName}
-              >
-                {p.threadName}
-              </QuickActionButton>
-            </li>
-          ))}
-        </ul>
+        <TabbedRepoPanel
+          setPanels={setPanels}
+          onOpenThreadPanel={onOpenThreadPanel}
+        />
+        {false && (
+          <StackingNotesThreadsPanel
+            setPanels={setPanels}
+            onOpenThreadPanel={onOpenThreadPanel}
+          />
+        )}
+      </div>
+      <ThreadWorkspace setPanels={setPanels} visiblePanels={visiblePanels} />
+      <div style={{ width: '20rem', color: globalStyles.primaryBlue }}>
+        side bar
+      </div>
+    </div>
+  );
+}
 
-        <ul style={{ padding: '1rem', listStyle: 'none' }}>
-          <li>
-            <h2 className={styles.quickActionSectionLabel}>Catatan</h2>
-          </li>
-          {[
-            { name: 'f1' },
-            { name: 'f1a' },
-            { name: 'f2' },
-            {
-              name: 'f1b',
-              preview: 'Pura-puranya ini note dengan nomer ID f1b. ...',
-            },
-            {
-              name: 'f1c',
-              preview: 'Note ID f1c, lanjutan dari ID f1b. ...',
-            },
-            { name: '...truncated' },
-            { name: 'fokajs98' },
-            { name: 'fokajs99' },
-          ].map(({ name, preview }) => (
-            <li key={name} className={styles.repoDrawerItem}>
-              <QuickActionButton
-                icon={<BsCardText size="18" />}
-                full
-                truncLabel
-                title={name + (preview ? ` - ${preview}` : '')}
+function TabbedRepoPanel({
+  setPanels,
+  onOpenThreadPanel,
+}: {
+  setPanels: React.Dispatch<React.SetStateAction<Panel[]>>;
+  onOpenThreadPanel: (id: number) => void;
+}) {
+  const [activeTab, setActiveTab] = React.useState<number>(0);
+  return (
+    <div className={styles.repoPanel}>
+      <div className={styles.repoTabBar}>
+        <RepoTabButton
+          title="Catatan"
+          isActive={activeTab === 0}
+          onClick={() => setActiveTab(0)}
+        >
+          <HiOutlineRectangleStack size="18" />
+        </RepoTabButton>
+        <RepoTabButton
+          title="Utas"
+          isActive={activeTab === 1}
+          onClick={() => setActiveTab(1)}
+        >
+          <HiOutlineQueueList size="18" />
+        </RepoTabButton>
+      </div>
+      {activeTab === 0 && (
+        <RepoContentPanel>
+          <RepoNoteList>
+            {[
+              { name: 'f1' },
+              { name: 'f1a' },
+              { name: 'f2' },
+              {
+                name: 'f1b',
+                preview: 'Pura-puranya ini note dengan nomer ID f1b. ...',
+              },
+              {
+                name: 'f1c',
+                preview: 'Note ID f1c, lanjutan dari ID f1b. ...',
+              },
+              { name: '...truncated' },
+              { name: 'fokajs98' },
+              { name: 'fokajs99' },
+            ].map((note) => (
+              <RepoNoteCardItem
+                key={note.name}
                 onClick={() => {
                   const run: { [name: string]: () => void } = {
                     f1b: () => {
@@ -143,28 +168,104 @@ function ScreenRepository() {
                     },
                   };
 
-                  run[name]?.();
+                  run[note.name]?.();
                 }}
               >
-                {preview || name}{' '}
-                <span
-                  style={{
-                    display: 'inline-block',
-                    transform: 'translateY(2px)',
-                  }}
-                >
-                  <MdUnfoldMore />
-                </span>
-              </QuickActionButton>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <ThreadWorkspace setPanels={setPanels} visiblePanels={visiblePanels} />
-      <div style={{ width: '20rem', color: globalStyles.primaryBlue }}>
-        side bar
-      </div>
+                {note.preview || note.name}
+              </RepoNoteCardItem>
+            ))}
+          </RepoNoteList>
+        </RepoContentPanel>
+      )}
+      {activeTab === 1 && (
+        <RepoContentPanel>
+          <RepoNoteList>
+            {[fakePanelsData[1], fakePanelsData[2]].map((p, i) => (
+              <RepoThreadItem
+                key={p.id}
+                onClick={() => onOpenThreadPanel(p.id)}
+                title={p.threadName}
+              >
+                {p.threadName}
+              </RepoThreadItem>
+            ))}
+          </RepoNoteList>
+        </RepoContentPanel>
+      )}
     </div>
+  );
+}
+
+function RepoNoteList({ children }: React.PropsWithChildren) {
+  return <div className={styles.repoNoteList}>{children}</div>;
+}
+
+function RepoNoteCardItem({
+  children,
+  onClick,
+}: React.PropsWithChildren<{ onClick?: () => void }>) {
+  return (
+    <div className={styles.repoNoteCardItem} onClick={onClick}>
+      <span className={styles.repoNoteCardIcon}>
+        <BsCardText size="24" />
+      </span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+function RepoThreadItem({
+  children,
+  title,
+  onClick,
+}: React.PropsWithChildren<{ title?: string; onClick?: () => void }>) {
+  return (
+    <div className={styles.repoNoteCardItem} onClick={onClick} title={title}>
+      <span className={styles.repoNoteCardIcon}>
+        <HiOutlineQueueList size="24" />
+      </span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+function RepoTabButton({
+  title,
+  isActive,
+  onClick,
+  children,
+}: React.PropsWithChildren<{
+  onClick: () => void;
+  isActive?: boolean;
+  title?: string;
+}>) {
+  return !children ? null : (
+    <div className={clsx(styles.tab, isActive ? styles.tabActive : undefined)}>
+      <button
+        className={clsx(
+          styles.tabButtonBase,
+          styles.repoTabButton,
+          isActive ? styles.repoTabButtonActive : undefined
+        )}
+        title={title}
+        onClick={onClick}
+      >
+        {children}
+      </button>
+    </div>
+  );
+}
+
+function RepoContentPanel({ children }: React.PropsWithChildren) {
+  return (
+    <ScrollArea.Root className={styles.repoContentPanel}>
+      <ScrollArea.Viewport className={styles.repoContentPanelViewport}>
+        {children}
+      </ScrollArea.Viewport>
+      <ScrollArea.Scrollbar orientation="vertical">
+        <ScrollArea.Thumb />
+      </ScrollArea.Scrollbar>
+    </ScrollArea.Root>
   );
 }
 
@@ -218,12 +319,12 @@ function ThreadWelcomeScreen({
           </div>
 
           <div>
-            <h2 className={styles.quickActionSectionLabel}>Utas barusan</h2>
+            <h2 className={styles.quickActionSectionLabel}>Utas Barusan</h2>
             <ul className={styles.quickActionList}>
               {[fakePanelsData[1], fakePanelsData[2]].map((p) => (
                 <li key={p.id}>
                   <QuickActionButton
-                    icon={<HiOutlineRectangleStack size="18" />}
+                    icon={<HiOutlineQueueList size="18" />}
                     onClick={() => onOpenNewPanel(p.id)}
                     title={p.threadName}
                   >
@@ -237,7 +338,7 @@ function ThreadWelcomeScreen({
               <QuickActionButton
                 onClick={() => alert('TODO: Buka sidebar list threads')}
               >
-                Telusuri semua Utas
+                Telusuri Semua Utas
               </QuickActionButton>
             </div>
           </div>
@@ -254,7 +355,7 @@ function LatestNotes({
 }) {
   return (
     <React.Fragment>
-      <h2 className={styles.quickActionSectionLabel}>Catatan terbaru</h2>
+      <h2 className={styles.quickActionSectionLabel}>Catatan Terbaru</h2>
       <div className={styles.quickActionPreviewNoteCardList}>
         {[
           { name: 'fokajs99' },
@@ -305,7 +406,7 @@ function LatestNotes({
           <QuickActionButton
             onClick={() => alert('TODO: Buka sidebar list notes')}
           >
-            Telusuri semua Catatan
+            Telusuri Semua Catatan
           </QuickActionButton>
         </div>
       </div>
@@ -487,7 +588,7 @@ function ThreadWorkspace({
         <div className={styles.threadHeader}>
           <div className={styles.threadNameHeading}>
             <div>
-              <HiOutlineRectangleStack size="22" />
+              <HiOutlineQueueList size="22" />
             </div>
             <h1
               className={styles.threadNameLabel}
@@ -497,7 +598,7 @@ function ThreadWorkspace({
                   : undefined
               }
             >
-              {currentPanelData?.threadName || <>kata kunci&#42;</>}
+              {currentPanelData?.threadName || <>kasih kata kunci&#42;</>}
             </h1>
           </div>
           <QuickActionButton
@@ -519,7 +620,7 @@ function ThreadWorkspace({
                 <span>Menyimpan...</span>
               </>
             ) : (
-              'Simpan Utas'
+              <span>Simpan Utas?</span>
             )}
           </QuickActionButton>
         </div>
@@ -895,6 +996,121 @@ function ThreadPanelWithFakeLongContent() {
 
       <ThreadBottomActions />
     </ThreadPanelScrollableContainer>
+  );
+}
+
+function StackingNotesThreadsPanel({
+  setPanels,
+  onOpenThreadPanel,
+}: {
+  setPanels: React.Dispatch<React.SetStateAction<Panel[]>>;
+  onOpenThreadPanel: (id: number) => void;
+}) {
+  return (
+    <div>
+      <ul style={{ padding: '1rem', paddingBottom: 0, listStyle: 'none' }}>
+        <li>
+          <h2 className={styles.quickActionSectionLabel}>Utas</h2>
+        </li>
+        {[fakePanelsData[1], fakePanelsData[2]].map((p) => (
+          <li key={p.id} className={styles.repoDrawerItem}>
+            <QuickActionButton
+              icon={<HiOutlineRectangleStack size="18" />}
+              full
+              truncLabel
+              onClick={() => onOpenThreadPanel(p.id)}
+              title={p.threadName}
+            >
+              {p.threadName}
+            </QuickActionButton>
+          </li>
+        ))}
+      </ul>
+
+      <ul style={{ padding: '1rem', listStyle: 'none' }}>
+        <li>
+          <h2 className={styles.quickActionSectionLabel}>Catatan</h2>
+        </li>
+        {[
+          { name: 'f1' },
+          { name: 'f1a' },
+          { name: 'f2' },
+          {
+            name: 'f1b',
+            preview: 'Pura-puranya ini note dengan nomer ID f1b. ...',
+          },
+          {
+            name: 'f1c',
+            preview: 'Note ID f1c, lanjutan dari ID f1b. ...',
+          },
+          { name: '...truncated' },
+          { name: 'fokajs98' },
+          { name: 'fokajs99' },
+        ].map(({ name, preview }) => (
+          <li key={name} className={styles.repoDrawerItem}>
+            <QuickActionButton
+              icon={<BsCardText size="18" />}
+              full
+              truncLabel
+              title={name + (preview ? ` - ${preview}` : '')}
+              onClick={() => {
+                const run: { [name: string]: () => void } = {
+                  f1b: () => {
+                    setPanels((panels) => {
+                      if (panels.length === 0) {
+                        return fakePanelsData.map((p) => ({
+                          ...p,
+                          visible: p.id === 4,
+                        }));
+                      } else {
+                        return panels.map((p) => ({
+                          ...p,
+                          visible: p.id === 4 || p.visible,
+                        }));
+                      }
+                    });
+                  },
+
+                  f1c: () => {
+                    setPanels((panels) => {
+                      if (
+                        panels.length === 0 ||
+                        !panels.find((p) => p.id === 4)
+                      ) {
+                        return panels;
+                      } else {
+                        return panels.map((p) =>
+                          p.id !== 4
+                            ? p
+                            : {
+                                ...p,
+                                component: (
+                                  <ThreadPanelWithFakeOrderedContent />
+                                ),
+                              }
+                        );
+                      }
+                    });
+                  },
+                };
+
+                run[name]?.();
+              }}
+            >
+              {preview || name}{' '}
+              <span
+                style={{
+                  display: 'inline-block',
+                  transform: 'translateY(2px)',
+                }}
+              >
+                <MdUnfoldMore />
+              </span>
+            </QuickActionButton>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

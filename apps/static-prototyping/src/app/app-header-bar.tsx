@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HiOutlineRectangleGroup } from 'react-icons/hi2';
+import { TbCapture } from 'react-icons/tb';
+import { HiOutlineRectangleGroup, HiOutlineInboxStack } from 'react-icons/hi2';
 import { clsx } from 'clsx';
 
 import * as styles from './app-header-bar.css';
@@ -23,7 +24,10 @@ function AppHeaderBar() {
             )}
             to="/captures"
           >
-            Tangkapan
+            <PushedDownIcon>
+              <TbCapture size="14" />
+            </PushedDownIcon>
+            <MenuLabel>Tangkapan</MenuLabel>
           </Link>
           <Link
             className={clsx(
@@ -32,12 +36,37 @@ function AppHeaderBar() {
             )}
             to="/repository"
           >
-            Repositori
+            <PushedDownIcon>
+              <HiOutlineInboxStack size="14" />
+            </PushedDownIcon>
+            <MenuLabel>Repositori</MenuLabel>
           </Link>
         </nav>
       </div>
     </header>
   );
+}
+
+function PushedDownIcon({ children }: React.PropsWithChildren) {
+  return children ? (
+    <span
+      style={{
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transform: 'translateY(2px)',
+        marginRight: 5,
+      }}
+    >
+      {children}
+    </span>
+  ) : null;
+}
+
+function MenuLabel({ children }: React.PropsWithChildren) {
+  return children ? (
+    <span style={{ display: 'inline-block' }}>{children}</span>
+  ) : null;
 }
 
 export { AppHeaderBar };

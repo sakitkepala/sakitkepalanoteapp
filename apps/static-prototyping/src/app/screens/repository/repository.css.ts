@@ -4,15 +4,105 @@ import * as globalStyles from '../../global-styles.css';
 const threadCardItemGap = createVar();
 const contentParagraphGap = createVar();
 
-export const fullHeightContainer = style({
+export const tabButtonBase = style({
+  border: 'none',
+  padding: 0,
+  margin: 0,
+  background: 'none',
+  fontSize: 14,
+  fontFamily: 'inherit',
+  cursor: 'pointer',
+  userSelect: 'none',
+});
+
+export const screenRepositoryContainer = style({
   selectors: {
     '#root > &': {
-      flex: 1,
+      flex: '1 0 0',
     },
   },
 
   display: 'flex',
   justifyContent: 'center',
+});
+
+export const repoPanel = style({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+export const repoTabBar = style({
+  padding: '3px 0',
+  flexShrink: 0,
+  minHeight: 34,
+  display: 'flex',
+  justifyContent: 'center',
+  // UNDECIDING:
+  // borderBottom: 'solid 1px ' + globalStyles.primaryBlue2,
+});
+
+export const repoTabButton = style({
+  padding: '0.5rem 0.75rem',
+  backgroundColor: globalStyles.primaryBlue,
+  color: globalStyles.primaryBlue2,
+  transition: 'color 0.15s',
+  ':hover': {
+    borderRadius: 2,
+    backgroundColor: globalStyles.primaryBlue1,
+    color: globalStyles.primaryBlue3,
+  },
+});
+
+export const repoTabButtonActive = style({
+  cursor: 'default',
+  color: globalStyles.primaryBlue3,
+});
+
+export const repoContentPanel = style({
+  flex: '1 0 0',
+  height: '100%',
+  overflow: 'hidden',
+  padding: 3,
+  // UNDECIDING:
+  // backgroundColor: globalStyles.primaryBlue1,
+});
+
+export const repoContentPanelViewport = style({
+  width: '100%',
+  height: '100%',
+});
+
+export const repoNoteList = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  // padding: '0.75rem 1rem',
+  padding: '0 1rem',
+});
+
+export const repoNoteCardItem = style({
+  minHeight: 54,
+  padding: '0.5rem 0.75rem',
+  borderRadius: 6,
+  border: 'solid 1px ' + globalStyles.primaryBlue2,
+  boxShadow: '0 1px 0 ' + globalStyles.primaryBlue2,
+  backgroundColor: globalStyles.primaryBlue,
+  fontSize: 14,
+  display: 'flex',
+  gap: '1rem',
+  cursor: 'pointer',
+  transition: 'background-color 0.15s, border-color 0.15s',
+  ':hover': {
+    backgroundColor: '#ffffff',
+    borderColor: globalStyles.primaryBlue1,
+    // borderBottomColor: globalStyles.primaryBlue1,
+    boxShadow: '0 1px 0 ' + globalStyles.primaryBlue1,
+  },
+});
+
+export const repoNoteCardIcon = style({
+  color: globalStyles.primaryBlue2,
 });
 
 export const repoDrawerItem = style({
@@ -54,7 +144,7 @@ export const welcomeActionsGrid = style({
 
 export const quickActionSectionLabel = style({
   userSelect: 'none',
-  fontSize: '1rem',
+  fontSize: '0.875rem',
   color: globalStyles.primaryBlue2,
   marginBottom: '0.5rem',
 });
@@ -164,6 +254,7 @@ export const threadViewContainer = style({
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '43.75rem',
+  paddingInline: '1rem',
 });
 
 export const tabBar = style({
@@ -190,17 +281,6 @@ export const tabActions = style({
   gap: '0.5rem',
   alignItems: 'center',
   minHeight: 34,
-});
-
-export const tabButtonBase = style({
-  border: 'none',
-  padding: 0,
-  margin: 0,
-  background: 'none',
-  fontSize: 14,
-  fontFamily: 'inherit',
-  cursor: 'pointer',
-  userSelect: 'none',
 });
 
 export const tabAddButton = style({
